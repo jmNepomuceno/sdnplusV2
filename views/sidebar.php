@@ -12,11 +12,10 @@
     <div id="sidebar" class="sidebar">
         <h2 class="sidebar-title">My Menu</h2>
         <ul>
-            <li><a href="#">🏠 Home</a></li>
-            <li><a href="#">📄 Documents</a></li>
-            <li><a href="#">📊 Reports</a></li>
-            <li><a href="#">⚙ Settings</a></li>
-            <li><a href="#">❓ Help</a></li>
+            <li><a href="../views/patient_registration_form.php">📄 Patient Registration</a></li>
+            <li><a href="#">📄 Incoming Referral</a></li>
+            <li><a href="#">📊 Outgoing Referral</a></li>
+            <li><a href="#">⚙ Census</a></li>
         </ul>
     </div>
 
