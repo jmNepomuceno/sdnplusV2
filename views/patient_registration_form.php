@@ -17,7 +17,7 @@
 
     <div class="right-container">
         
-        <div class="function-div">
+        <div class="function-div d-flex justify-content-between align-items-center">
             <div class="left-buttons d-flex align-items-center gap-2">
                 <select id="classification-select" class="form-select d-none">
                     <option value="">-- Select Classification --</option>
@@ -26,10 +26,18 @@
                 <button type="button" class="btn btn-danger" id="clear-patient-btn">Clear</button>
             </div>
 
-            <div class="right-buttons">
-                <button type="button" class="btn btn-success" id="search-patient-btn">Search Patient</button>
+            <div class="right-buttons d-flex align-items-center gap-2">
+                <!-- ✅ New Add Referring Doctor button -->
+                <button type="button" class="btn btn-warning" id="add-referring-doctor-btn">
+                    <i class="bi bi-person-plus-fill"></i> Add Referring Doctor
+                </button>
+                
+                <button type="button" class="btn btn-success" id="search-patient-btn">
+                    <i class="bi bi-search"></i> Search Patient
+                </button>
             </div>
         </div>
+
 
         <div class="form-container">
             <fieldset class="personal-info">
@@ -326,6 +334,7 @@
 
     <?php include("../assets/php/patient_registration_form/modal/search_patient.php") ?>
     <?php include("../assets/php/patient_registration_form/modal/referral_form.php") ?>
+    <?php include("../assets/php/patient_registration_form/modal/referring_doctor.php") ?>
 
     <?php include("../links/script_links.php") ?>
 
@@ -333,5 +342,6 @@
     <script src="../assets/js/patient_registration_form/get_location.js?v=<?php echo time(); ?>"></script>
     <script src="../assets/js/modal/search_patient.js?v=<?php echo time(); ?>"></script>
     <script src="../assets/js/modal/referral_form.js?v=<?php echo time(); ?>"></script>
+    <script src="../assets/js/modal/referring_doctor.js?v=<?php echo time(); ?>"></script>
 </body>
 </html>

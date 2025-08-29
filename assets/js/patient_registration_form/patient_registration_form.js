@@ -1,8 +1,9 @@
 $(document).ready(function () {
     let search_patient = new bootstrap.Modal(document.getElementById('search-patient-modal'));
     let referral_form_modal = new bootstrap.Modal(document.getElementById('referral-form-modal'));
+    let add_referring_doctor_modal = new bootstrap.Modal(document.getElementById('add-referring-doctor-modal'));
 
-    referral_form_modal.show();
+    add_referring_doctor_modal.show();
 
     function validateEmail(email) {
         // Simple but effective regex for emails

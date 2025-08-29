@@ -1,3 +1,6 @@
+<?php 
+    $_SESSION['hospital_code'] = 1111;
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>

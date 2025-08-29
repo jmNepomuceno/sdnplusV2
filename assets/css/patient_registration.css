@@ -179,6 +179,8 @@ button[type="submit"]:hover {
   flex-direction: column;
   justify-content: center;
   align-items: center;
+
+  background: #b3b3b3;
 }
 
 /* ICD card */
