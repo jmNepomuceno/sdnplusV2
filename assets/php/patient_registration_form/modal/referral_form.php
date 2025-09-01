@@ -4,14 +4,14 @@
 
             <!-- Modal Header -->
             <div class="modal-header bg-dark text-white">
-                <h5 class="modal-title" id="referralLabel">🏥 ER Referral Form</h5>
+                <h5 class="modal-title" id="referralLabel">🏥 Referral Form</h5>
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
 
         <!-- Modal Body -->
             <div class="modal-body">
                 <form id="referral-form">
-
+                    <input type="hidden" name="hpercode" id="referral-hpercode-hidden-input">
                     <!-- 🔹 Critical Section -->
                     <div class="row m-3 g-3 align-items-center">
                         <div class="row" id="critical-section">
@@ -26,12 +26,12 @@
                             </label>
                             <div class="d-flex gap-3 mt-1">
                                 <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="radio" name="sensitive_case" id="sensitiveYes" value="Yes" required>
-                                <label class="form-check-label" for="sensitiveYes">Yes</label>
+                                    <input class="form-check-input" type="radio" name="sensitive_case" id="sensitiveYes" value="Yes" required>
+                                    <label class="form-check-label" for="sensitiveYes">Yes</label>
                                 </div>
                                 <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="radio" name="sensitive_case" id="sensitiveNo" value="No" required>
-                                <label class="form-check-label" for="sensitiveNo">No</label>
+                                    <input class="form-check-input" type="radio" name="sensitive_case" id="sensitiveNo" value="No" required>
+                                    <label class="form-check-label" for="sensitiveNo">No</label>
                                 </div>
                             </div>
                             </div>
@@ -59,7 +59,7 @@
                     </div>
 
                     <!-- 🔹 General Info -->
-                    <div class="row g-3">
+                    <div class="row g-3"> 
                         <div class="col-md-6">
                             <label class="form-label fw-bold">
                             Registered at RHU / Hospital <span class="text-danger">*</span>
@@ -80,8 +80,8 @@
                                 data-bs-placement="top"
                                 title="Select the doctor who referred the patient."></i>
                             </label>
-                            <select class="form-select custom-input" required>
-                            <option selected disabled value="">Select Doctor</option>
+                            <select class="form-select custom-input" id="referring-doctor-referral-form-select" required>
+                                <option selected disabled value="">Select Doctor</option>
                             </select>
                         </div>
                     </div>
@@ -95,7 +95,7 @@
                                 data-bs-placement="top"
                                 title="Enter the name of the parent or guardian if the patient is a minor."></i>
                             </label>
-                            <input type="text" class="form-control custom-input" required>
+                            <input type="text" id="parent-guardian-input" class="form-control custom-input" required>
                         </div>
                         <div class="col-md-3">
                             <label class="form-label fw-bold">
@@ -105,10 +105,10 @@
                                 data-bs-placement="top"
                                 title="Select if the patient is a member of PhilHealth."></i>
                             </label>
-                            <select class="form-select custom-input" required>
-                            <option value="" disabled selected>Select</option>
-                            <option>Yes</option>
-                            <option>No</option>
+                            <select class="form-select custom-input" id="phic-member-select" required>
+                                <option value="" disabled selected>Select</option>
+                                <option>Yes</option>
+                                <option>No</option>
                             </select>
                         </div>
                         <div class="col-md-3">
@@ -119,11 +119,11 @@
                                 data-bs-placement="top"
                                 title="Select the type of transport used by the patient."></i>
                             </label>
-                            <select class="form-select custom-input" required>
-                            <option value="" disabled selected>Select</option>
-                            <option>Ambulance</option>
-                            <option>Private Car</option>
-                            <option>Commute</option>
+                            <select class="form-select custom-input" id="transport-input" required>
+                                <option value="" disabled selected>Select</option>
+                                <option>Ambulance</option>
+                                <option>Private Car</option>
+                                <option>Commute</option>
                             </select>
                         </div>
                         <div class="col-md-3">
@@ -134,7 +134,7 @@
                                 data-bs-placement="top"
                                 title="This field records the exact date and time the patient was admitted."></i>
                             </label>
-                            <input type="datetime-local" class="form-control custom-input" value="<?php echo date('Y-m-d\TH:i'); ?>" readonly required>
+                            <input type="datetime-local" id="date-time-input" class="form-control custom-input" value="<?php echo date('Y-m-d\TH:i'); ?>" readonly required>
                         </div>
                     </div>
 
@@ -147,7 +147,7 @@
                             data-bs-placement="top"
                             title="Enter the patient's chief complaint and relevant medical history."></i>
                         </label>
-                        <textarea class="form-control custom-input" rows="2" required></textarea>
+                        <textarea class="form-control custom-input" id="chief-complaint-input" rows="2" required></textarea>
                     </div>
 
                     <div class="mt-3">
@@ -158,7 +158,7 @@
                             data-bs-placement="top"
                             title="State the reason for referral or the plan for further management."></i>
                         </label>
-                        <textarea class="form-control custom-input" rows="2" required></textarea>
+                        <textarea class="form-control custom-input" id="reason-input" rows="2" required></textarea>
                     </div>
 
                     <div class="mt-3">
@@ -169,7 +169,7 @@
                             data-bs-placement="top"
                             title="Enter the working diagnosis based on assessment."></i>
                         </label>
-                        <textarea class="form-control custom-input" rows="2" required></textarea>
+                        <textarea class="form-control custom-input" id="diagnosis-input" rows="2" required></textarea>
                     </div>
 
                     <div class="mt-3">
@@ -180,7 +180,7 @@
                             data-bs-placement="top"
                             title="Enter any additional remarks or notes."></i>
                         </label>
-                        <textarea class="form-control custom-input" rows="2" required></textarea>
+                        <textarea class="form-control custom-input" id="remarks-input" rows="2" required></textarea>
                     </div>
 
                     <!-- 🔹 Physical Examination -->
@@ -198,23 +198,23 @@
                             <div class="row g-3">
                                 <div class="col-md-2">
                                     <label class="form-label fw-bold">BP <span class="text-danger">*</span></label>
-                                    <input type="text" class="form-control custom-input" placeholder="e.g. 120/80" required>
+                                    <input type="text" class="form-control custom-input" id="bp-input" placeholder="e.g. 120/80" required>
                                 </div>
                                 <div class="col-md-2">
                                     <label class="form-label fw-bold">HR <span class="text-danger">*</span></label>
-                                    <input type="text" class="form-control custom-input" placeholder="e.g. 80 bpm" required>
+                                    <input type="text" class="form-control custom-input" id="hr-input" placeholder="e.g. 80 bpm" required>
                                 </div>
                                 <div class="col-md-2">
                                     <label class="form-label fw-bold">RR <span class="text-danger">*</span></label>
-                                    <input type="text" class="form-control custom-input" placeholder="e.g. 20 cpm" required>
+                                    <input type="text" class="form-control custom-input" id="rr-input" placeholder="e.g. 20 cpm" required>
                                 </div>
                                 <div class="col-md-2">
                                     <label class="form-label fw-bold">Temp (°C) <span class="text-danger">*</span></label>
-                                    <input type="text" class="form-control custom-input" placeholder="e.g. 37.2" required>
+                                    <input type="text" class="form-control custom-input" id="temp-input" placeholder="e.g. 37.2" required>
                                 </div>
                                 <div class="col-md-2">
                                     <label class="form-label fw-bold">WT (kg) <span class="text-danger">*</span></label>
-                                    <input type="text" class="form-control custom-input" placeholder="e.g. 70" required>
+                                    <input type="text" class="form-control custom-input" id="weight-input" placeholder="e.g. 70" required>
                                 </div>
                                 <div class="col-md-12 mt-2">
                                     <label class="form-label fw-bold">
@@ -224,13 +224,11 @@
                                         data-bs-placement="top"
                                         title="Describe significant findings from the physical examination."></i>
                                     </label>
-                                    <textarea class="form-control custom-input" rows="2" required></textarea>
+                                    <textarea class="form-control custom-input" id="pertinent-findings-input" rows="2" required></textarea>
                                 </div>
                             </div>
                         </div>
                     </div>
-
-
                 </form>
             </div>
 
@@ -245,7 +243,7 @@
                         <button type="reset" class="btn btn-outline-secondary me-2">
                         <i class="bi bi-arrow-counterclockwise me-1"></i> Reset
                         </button>
-                        <button type="submit" class="btn btn-primary" id="submit-referral-btn">
+                        <button class="btn btn-primary" id="submit-referral-btn">
                             <i class="bi bi-send-check me-1"></i> Submit Referral
                         </button>
                     </div>

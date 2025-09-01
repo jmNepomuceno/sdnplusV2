@@ -201,13 +201,14 @@ $(document).ready(function () {
             dataType: "json",
             success: function (res) {
                 console.log(res);
+                $('#referral-hpercode-hidden-input').val(patientID); // Set hidden input in referral form
                 if (!res.success) {
                     alert("⚠️ No patient details found.");
                     return;
                 }
 
                 let p = res.data;
-                console.table(p);
+                // console.table(p);
 
                 // --- Helper for dropdowns ---
                 function setDropdown(selector, value, text) {

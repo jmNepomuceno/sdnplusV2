@@ -4,7 +4,7 @@ $(document).ready(function () {
         type: 'GET',
         dataType: 'json',
         success: function(data) {
-            console.log(data)
+            // console.log(data)
             // Loop through regions
             data.forEach(function(region) {
                 let option = `<option value="${region.region_code}">${region.region_description}</option>`;

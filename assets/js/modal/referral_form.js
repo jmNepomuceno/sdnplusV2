@@ -5,7 +5,7 @@ $(document).ready(function() {
         type: "GET",
         dataType: "json",
         success: function (data) {
-            console.table(data)
+            // console.table(data)
             let hospitalSelect = $("#rhu-select");
             hospitalSelect.empty();
 
@@ -21,8 +21,6 @@ $(document).ready(function() {
         }
     });
 
-
-
     // Load referring doctors (based on session hospital_code)
     $.ajax({
         url: "../../assets/php/patient_registration_form/get_referring_doctors.php",
@@ -30,12 +28,12 @@ $(document).ready(function() {
         dataType: "json",
         success: function (data) {
             console.table(data)
-            // let doctorSelect = $("#doctor_id");
-            // doctorSelect.empty().append('<option value="">Select Doctor...</option>');
-            // data.forEach(doc => {
-            //     let fullName = `${doc.last_name}, ${doc.first_name} ${doc.middle_name ?? ""}`;
-            //     doctorSelect.append(`<option value="${doc.doctor_id}">${fullName}</option>`);
-            // });
+            let doctorSelect = $("#referring-doctor-referral-form-select");
+            doctorSelect.empty().append('<option value="">Select Doctor...</option>');
+            data.forEach(doc => {
+                let fullName = `${doc.last_name}, ${doc.first_name} ${doc.middle_name ?? ""}`;
+                doctorSelect.append(`<option value="${fullName}" data-mobileNo="${doc.mobile_number}">${fullName}</option>`);
+            });
         }
     });
 
@@ -91,44 +89,58 @@ $(document).ready(function() {
         $("#icdSuggestions").hide();
     });
 
+    $('#classification-select').on('change', function() {
+        $('#referralLabel').text('🏥 ' + $(this).val() + ' Referral Form');
+    });
 
-    $("#referral-form").on("submit", function (e) {
+    $("#submit-referral-btn").on("click", function (e) {
         e.preventDefault(); // stop normal form submit
 
-        let formData = $(this).serialize(); // gather all inputs
-        console.table('here')
-        // $.ajax({
-        //     url: "../../assets/php/patient_registration_form/submit_referral.php",
-        //     type: "POST",
-        //     data: formData,
-        //     dataType: "json",
-        //     success: function (response) {
-        //         if (response.status === "success") {
-        //             Swal.fire({
-        //                 icon: "success",
-        //                 title: "Referral Submitted",
-        //                 text: response.message,
-        //                 timer: 2000,
-        //                 showConfirmButton: false
-        //             }).then(() => {
-        //                 $("#referralForm")[0].reset(); // reset form
-        //             });
-        //         } else {
-        //             Swal.fire({
-        //                 icon: "error",
-        //                 title: "Submission Failed",
-        //                 text: response.message
-        //             });
-        //         }
-        //     },
-        //     error: function (xhr, status, error) {
-        //         console.error(error);
-        //         Swal.fire({
-        //             icon: "error",
-        //             title: "Error",
-        //             text: "Something went wrong. Please try again."
-        //         });
-        //     }
-        // });
+        let formData = {
+            // hpercode: $("#referral-hpercode-hidden-input").val(),
+            hpercode: 'PAT002929',
+            type: $("#classification-select").val(),
+            referred_by: 101010, //$("#referred_by").val(),
+            status: "Pending", // default
+            refer_to: 1111, //$("#refer_to").val(),
+            referred_by_no: 101010,
+            icd_diagnosis: $("#icdCode").val(),
+            sensitive_case: $("input[name='sensitive_case']:checked").val(),
+            parent_guardian: $("#parent-guardian-input").val(),
+            phic_member: $("#phic-member-select").val(),
+            transport: $("#transport-input").val(),
+            referring_doctor: $("#referring-doctor-referral-form-select").val(),
+            chief_complaint_history: $("#chief-complaint-input").val(),
+            reason: $("#reason-input").val(),
+            diagnosis: $("#diagnosis-input").val(),
+            remarks: $("#remarks-input").val(),
+            bp: $("#bp-input").val(),
+            hr: $("#hr-input").val(),
+            rr: $("#rr-input").val(),
+            temp: $("#temp-input").val(),
+            weight: $("#weight-input").val(),
+            pertinent_findings: $("#pertinent-findings-input").val()
+        };
+
+        console.table(formData)
+
+        $.ajax({
+            url: "../../assets/php/patient_registration_form/add_incoming_referral.php",
+            type: "POST",
+            data: formData,
+            dataType: "json",
+            success: function (response) {
+                console.log(response);
+            },
+            error: function (xhr, status, error) {
+                console.error(error);
+                Swal.fire({
+                    icon: "error",
+                    title: "Error",
+                    text: "Something went wrong. Please try again."
+                });
+            }
+        });
     });
+
 });
