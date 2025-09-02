@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <?php include("../links/header_link.php") ?>
-    <link rel="stylesheet" href="../assets/css/login.css?v=<?php echo time(); ?>">
+    <?php include("./links/header_link.php") ?>
+    <link rel="stylesheet" href="./assets/css/login.css?v=<?php echo time(); ?>">
     <title>Document</title>
 
     <style>
@@ -75,7 +75,7 @@
 
 
     
-    <?php include("../links/script_links.php") ?>
+    <?php include("./links/script_links.php") ?>
     <script src="https://rawgit.com/mrdoob/stats.js/r16/build/stats.min.js"></script>
     <script type="text/javascript">
         particlesJS("particles-js", {
@@ -148,6 +148,6 @@
         requestAnimationFrame(update);
     </script>
 
-    <script src="../assets/js/login/login.js?v=<?php echo time(); ?>"></script>
+    <script src="./assets/js/login/login.js?v=<?php echo time(); ?>"></script>
 </body>
 </html>

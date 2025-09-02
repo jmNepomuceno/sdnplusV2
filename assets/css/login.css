@@ -14,7 +14,7 @@ body {
     justify-content: flex-start;
     align-items: center;
     flex-direction: column;
-    gap:100px;
+    gap:50px;
     color: white;
     font-family: Arial, sans-serif;
 }
@@ -25,7 +25,7 @@ body {
 }
 
 .header-title h1, .header-title h2{
-    font-size: 4rem;
+    font-size: 3.5rem;
     text-align: center;
     margin-bottom: 20px;
     font-weight: 700;
@@ -34,7 +34,7 @@ body {
 }
 
 .header-title h2{
-    font-size: 2.5rem;
+    font-size: 2rem;
     color: #333333;
 }
 
