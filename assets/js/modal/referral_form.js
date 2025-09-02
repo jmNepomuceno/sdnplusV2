@@ -96,14 +96,20 @@ $(document).ready(function() {
     $("#submit-referral-btn").on("click", function (e) {
         e.preventDefault(); // stop normal form submit
 
+        // Validate form first
+        let form = $("#referral-form")[0]; // get DOM element of the form
+        if (!form.checkValidity()) {
+            form.reportValidity(); // triggers the browser's built-in validation UI
+            return; // stop here if form is invalid
+        }
+
         let formData = {
             // hpercode: $("#referral-hpercode-hidden-input").val(),
             hpercode: 'PAT002929',
             type: $("#classification-select").val(),
-            referred_by: 101010, //$("#referred_by").val(),
             status: "Pending", // default
-            refer_to: 1111, //$("#refer_to").val(),
-            referred_by_no: 101010,
+            refer_to: $("#rhu-select option:selected").text(),
+            referred_by_no: $("#referring-doctor-referral-form-select option:selected").data("mobileno"),
             icd_diagnosis: $("#icdCode").val(),
             sensitive_case: $("input[name='sensitive_case']:checked").val(),
             parent_guardian: $("#parent-guardian-input").val(),
@@ -124,23 +130,23 @@ $(document).ready(function() {
 
         console.table(formData)
 
-        $.ajax({
-            url: "../../assets/php/patient_registration_form/add_incoming_referral.php",
-            type: "POST",
-            data: formData,
-            dataType: "json",
-            success: function (response) {
-                console.log(response);
-            },
-            error: function (xhr, status, error) {
-                console.error(error);
-                Swal.fire({
-                    icon: "error",
-                    title: "Error",
-                    text: "Something went wrong. Please try again."
-                });
-            }
-        });
+        // $.ajax({
+        //     url: "../../assets/php/patient_registration_form/add_incoming_referral.php",
+        //     type: "POST",
+        //     data: formData,
+        //     dataType: "json",
+        //     success: function (response) {
+        //         console.log(response);
+        //     },
+        //     error: function (xhr, status, error) {
+        //         console.error(error);
+        //         Swal.fire({
+        //             icon: "error",
+        //             title: "Error",
+        //             text: "Something went wrong. Please try again."
+        //         });
+        //     }
+        // });
     });
 
 });

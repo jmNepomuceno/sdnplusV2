@@ -1,5 +1,7 @@
 <?php 
-    $_SESSION['hospital_code'] = 1111;
+    session_start();
+    $_SESSION['hospital_code'] = 101010;
+    $_SESSION['hospital_name'] = 'Test RHU';
 ?>
 <!DOCTYPE html>
 <html lang="en">

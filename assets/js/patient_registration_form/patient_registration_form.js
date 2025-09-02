@@ -3,7 +3,7 @@ $(document).ready(function () {
     let referral_form_modal = new bootstrap.Modal(document.getElementById('referral-form-modal'));
     let add_referring_doctor_modal = new bootstrap.Modal(document.getElementById('add-referring-doctor-modal'));
 
-    referral_form_modal.show();
+    // referral_form_modal.show();
 
     function validateEmail(email) {
         // Simple but effective regex for emails

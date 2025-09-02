@@ -2,13 +2,87 @@
     include("../../connection/connection.php");
 
     header("Content-Type: application/json");
+    date_default_timezone_set('Asia/Manila');
+    session_start();
 
     try {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+
+            // referral_id
+            
+            $sql = "SELECT referral_id FROM incoming_referrals ORDER BY referral_id DESC LIMIT 1";
+            $stmt = $pdo->prepare($sql);
+            $stmt->execute();
+            $data_referral_id = $stmt->fetch(PDO::FETCH_ASSOC);
+
+            $referral_id = ""; 
+            if($data_referral_id == "" || $data_referral_id == null ){
+                $referral_id = "REF000001";
+            }else{
+                $last_number = substr($data_referral_id['referral_id'], 3);
+
+                $referral_idPrefix = "REF"; // Set the prefix
+                $new_number = $last_number + 1; // Increment the last number
+
+                $zeros = "0";
+
+                if($new_number <= 9){
+                    $zeros = "00000";
+                }else if($new_number <= 99){
+                    $zeros = "0000";
+                }else if($new_number <= 999){
+                    $zeros = "000";
+                }else if($new_number <= 9999){
+                    $zeros = "00";
+                }else if($new_number <= 99999){
+                    $zeros = "0";
+                }else if($new_number <= 999999){
+                    $zeros = "";
+                }
+
+                $referral_id = $referral_idPrefix . $zeros . $new_number;
+            }
+
+            // reference_num
+            $current_date = new DateTime();
+            $year = $current_date->format("Y");
+            $month = $current_date->format("m");
+            $day = $current_date->format("d");
+            $inputString = $_POST['refer_to'];
+
+            // FOR NAMING OF THE REFERENCE NUMBER DEPENDS ON WHAT HOSPITAL, BGH WILL REFER TO
+            $referTo = filter_input(INPUT_POST, 'refer_to');
+            $sql_temp = "SELECT hospital_municipality_code FROM sdn_hospital WHERE hospital_name = :refer_to";
+            $stmt_temp = $pdo->prepare($sql_temp);
+            $stmt_temp->bindParam(':refer_to', $referTo, PDO::PARAM_STR);
+            $stmt_temp->execute();
+            $data_municipality_code = $stmt_temp->fetch(PDO::FETCH_ASSOC);
+
+            // reference now the municipality code to get the municipality name from city table
+            $sql_temp = "SELECT municipality_description FROM city WHERE municipality_code=:id ";
+            $stmt_temp = $pdo->prepare($sql_temp); 
+            $stmt_temp->bindParam(':id', $data_municipality_code['hospital_municipality_code'], PDO::PARAM_STR);
+            $stmt_temp->execute();
+            $data_municipality_desc = $stmt_temp->fetch(PDO::FETCH_ASSOC);
+
+
+            $words = explode(' ', $inputString);
+            $firstLetters = array_map(function ($word) {
+                return ucfirst(substr($word, 0, 1));
+            }, $words);
+            $abbreviation = implode('', $firstLetters);
+
+            if($data_municipality_desc['municipality_description'] === "CITY OF BALANGA (Capital)"){
+                $data_municipality_desc['municipality_description'] = "BALANGA";
+                $abbreviation = "BGHMC";
+            }
+
+            $reference_num = 'R3-BTN-'. $data_municipality_desc['municipality_description'] . '-' . $abbreviation . '-' . $year . '-' . $month . '-' . $day;
+
             // Collect POST data (sanitize/validate as needed)
             $hpercode   = $_POST['hpercode'] ?? null;
             $type       = $_POST['type'] ?? null; // classification
-            $referred_by     = $_POST['referred_by'] ?? null;
+            $referred_by     = $_SESSION['hospital_name'];
             $referred_by_no  = $_POST['referred_by_no'] ?? null;
             $refer_to        = $_POST['refer_to'] ?? null;
 
@@ -50,7 +124,7 @@
             $landline_no = $mobile_no = null;
             if ($referred_by) {
                 $stmt = $pdo->prepare("SELECT hospital_landline, hospital_mobile FROM sdn_hospital WHERE hospital_code = ?");
-                $stmt->execute([$referred_by]);
+                $stmt->execute([$_SESSION['hospital_code']]);
                 if ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                     $landline_no = $row['hospital_landline'];
                     $mobile_no   = $row['hospital_mobile'];
@@ -58,7 +132,7 @@
             }
 
             $sql = "INSERT INTO incoming_referrals (
-                hpercode, patlast, patfirst, patmiddle, patsuffix,
+                hpercode, referral_id, reference_num, patlast, patfirst, patmiddle, patsuffix,
                 type, referred_by, referred_by_no, refer_to,
                 landline_no, mobile_no, icd_diagnosis, sensitive_case, parent_guardian,
                 phic_member, transport, referring_doctor,
@@ -66,7 +140,7 @@
                 bp, hr, rr, temp, weight, pertinent_findings,
                 status, date_time
             ) VALUES (
-                :hpercode, :patlast, :patfirst, :patmiddle, :patsuffix,
+                :hpercode, :referral_id, :reference_num, :patlast, :patfirst, :patmiddle, :patsuffix,
                 :type, :referred_by, :referred_by_no, :refer_to,
                 :landline_no, :mobile_no, :icd_diagnosis, :sensitive_case, :parent_guardian,
                 :phic_member, :transport, :referring_doctor,
@@ -78,6 +152,8 @@
             $stmt = $pdo->prepare($sql);
             $success = $stmt->execute([
                 ':hpercode' => $hpercode,
+                ':referral_id' => $referral_id,
+                ':reference_num' => $reference_num,
                 ':patlast' => $patlast,
                 ':patfirst' => $patfirst,
                 ':patmiddle' => $patmiddle,
