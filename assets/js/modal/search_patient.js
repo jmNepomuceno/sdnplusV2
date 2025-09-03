@@ -200,7 +200,7 @@ $(document).ready(function () {
             data: { hpercode: patientID },
             dataType: "json",
             success: function (res) {
-                console.log(res);
+                console.log(patientID);
                 $('#referral-hpercode-hidden-input').val(patientID); // Set hidden input in referral form
                 if (!res.success) {
                     alert("⚠️ No patient details found.");

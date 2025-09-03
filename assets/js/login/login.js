@@ -16,7 +16,7 @@ $(document).ready(function () {
                     );
                     // redirect after 1.5s
                     setTimeout(function(){
-                        window.location.href = "dashboard.php";
+                        window.location.href = "./views/patient_registration_form.php";
                     }, 1500);
                 } else {
                     $("#login-response").html(

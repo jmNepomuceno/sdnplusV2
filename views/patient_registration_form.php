@@ -1,5 +1,7 @@
 <?php 
     session_start();
+
+    
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -8,7 +10,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Patient Registration</title>
     <?php include("../links/header_link.php") ?>
+
+    <link rel="stylesheet" href="../assets/css/sidebar.css">
     <link rel="stylesheet" href="../assets/css/patient_registration.css">
+    <link rel="stylesheet" href="../assets/css/navbar.css">
     
 </head>
 <body>
@@ -18,8 +23,10 @@
     </div>
 
     <div class="right-container">
+        <!-- Top Navbar inside right-container -->
+        <?php include('../views/navbar.php') ?>
         
-        <div class="function-div d-flex justify-content-between align-items-center">
+        <div class="function-div">
             <div class="left-buttons d-flex align-items-center gap-2">
                 <select id="classification-select" class="form-select d-none">
                     <option value="">-- Select Classification --</option>
@@ -282,7 +289,7 @@
                 </fieldset>
 
                 <fieldset>
-                    <legend>Address Outside the Philippines (For OFW Only)</legend>
+                    <legend>Address Outside the Philippines (OFW)</legend>
                     <div class="form-row">
                         <div class="form-group">
                             <label>Employer's Name</label>
@@ -324,7 +331,7 @@
                             <label>Office Phone No.</label>
                             <input id="office-mobile-txt-ofw" type="text" name="ofw_office_phone" autocomplete="off">
                         </div>
-                        <div class="form-group">
+                        <div class="form-group" style="display:none">
                             <label>Mobile Phone No.</label>
                             <input id="mobile-no-txt-ofw" type="text" name="ofw_mobile" autocomplete="off">
                         </div>
@@ -339,7 +346,8 @@
     <?php include("../assets/php/patient_registration_form/modal/referring_doctor.php") ?>
 
     <?php include("../links/script_links.php") ?>
-
+    
+    <script src="../assets/js/sidebar_traverse.js"></script>
     <script src="../assets/js/patient_registration_form/patient_registration_form.js?v=<?php echo time(); ?>"></script>
     <script src="../assets/js/patient_registration_form/get_location.js?v=<?php echo time(); ?>"></script>
     <script src="../assets/js/modal/search_patient.js?v=<?php echo time(); ?>"></script>

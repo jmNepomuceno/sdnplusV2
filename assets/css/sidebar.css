@@ -8,7 +8,7 @@ body {
     position: fixed;
     left: 0;
     top: 0;
-    width: 240px;
+    width: 250px;
     height: 100%;
     background-color: #222;
     color: white;
@@ -16,6 +16,12 @@ body {
     transform: translateX(0);
     transition: transform 0.3s ease;
     z-index: 1000;
+
+    display:flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    margin:0;
 }
 
 .sidebar.closed {
@@ -67,6 +73,43 @@ body {
     color: white;
     border-radius: 4px;
 }
+
+.sidebar #side-bar-title-bgh{
+    width:90%;
+    height: 10%;
+    display:flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    /* border-bottom: 4px solid #29363d; */
+    margin-bottom:20px;
+
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0));
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-radius: 20px;
+    border:1px solid rgba(255, 255, 255, 0.18);
+    box-shadow: 0 8px 32px 0 rgba(0,0,0,0.37);
+
+    padding:5px;
+}
+
+.sidebar #side-bar-title-bgh img{
+    width: 35%;
+    height: 82%;
+}
+
+.sidebar #side-bar-title-bgh p{
+    color: white;
+    font-size: 0.8rem;
+    line-height: 1.25rem;
+    width:65%;
+    padding:0;
+    margin:0;
+}
+
+
 
 @media (max-width: 768px) {
     .main {

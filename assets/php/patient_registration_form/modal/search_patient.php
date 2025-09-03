@@ -15,13 +15,13 @@
                 <form id="search-patient-form" class="mb-3">
                     <div class="row g-2">
                         <div class="col-md-4">
-                            <input type="text" class="form-control" placeholder="Last Name" id="last-name-search">
+                            <input type="text" class="form-control" placeholder="Last Name" id="last-name-search" autocomplete="off">
                         </div>
                         <div class="col-md-4">
-                            <input type="text" class="form-control" placeholder="First Name" id="first-name-search">
+                            <input type="text" class="form-control" placeholder="First Name" id="first-name-search" autocomplete="off">
                         </div>
                         <div class="col-md-4">
-                            <input type="text" class="form-control" placeholder="Middle Name" id="middle-name-search">
+                            <input type="text" class="form-control" placeholder="Middle Name" id="middle-name-search" autocomplete="off">
                         </div>
                     </div>
                     <div class="text-center mt-3">

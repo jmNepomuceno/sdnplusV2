@@ -82,7 +82,7 @@
             // Collect POST data (sanitize/validate as needed)
             $hpercode   = $_POST['hpercode'] ?? null;
             $type       = $_POST['type'] ?? null; // classification
-            $referred_by     = $_SESSION['hospital_name'];
+            $referred_by     = $_SESSION['user']['hospital_name'];
             $referred_by_no  = $_POST['referred_by_no'] ?? null;
             $refer_to        = $_POST['refer_to'] ?? null;
 
@@ -124,7 +124,7 @@
             $landline_no = $mobile_no = null;
             if ($referred_by) {
                 $stmt = $pdo->prepare("SELECT hospital_landline, hospital_mobile FROM sdn_hospital WHERE hospital_code = ?");
-                $stmt->execute([$_SESSION['hospital_code']]);
+                $stmt->execute([$_SESSION['user']['hospital_code']]);
                 if ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                     $landline_no = $row['hospital_landline'];
                     $mobile_no   = $row['hospital_mobile'];
@@ -183,6 +183,10 @@
                 ':status' => $status,
                 ':date_time' => $dateTime
             ]);
+
+            // update the status of the patient for the hperson
+            $stmt = $pdo->prepare("UPDATE hperson SET status = 'Pending', type=:type WHERE hpercode = :hpercode");
+            $stmt->execute([':hpercode' => $hpercode, ':type' => $type]);
 
             echo json_encode([
                 "success" => true,

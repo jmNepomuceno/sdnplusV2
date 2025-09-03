@@ -316,4 +316,8 @@ $(document).ready(function () {
     $('#search-patient-btn').on('click', function () {
         search_patient.show();
     })
+
+    $('#add-referring-doctor-btn').on('click', function () {
+        add_referring_doctor_modal.show();
+    })
 });

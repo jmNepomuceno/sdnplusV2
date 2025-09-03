@@ -9,21 +9,21 @@ body {
 .left-container {
     width: 250px;
     background: #f8f8f8;
-    border-right: 1px solid #ccc;
     padding: 20px;
     flex-shrink: 0;
 }
 
 .right-container {
     flex: 1;
-    padding: 20px;
     overflow-y: auto;
     background: #fafafa;
 
     display:flex;
     flex-direction: column;
-    justify-content: space-between;
+    justify-content: flex-start;
     align-items: center;
+
+    margin:0;
 }
 
 /* Form Styling */
@@ -32,8 +32,9 @@ body {
   flex-direction: row;
   justify-content: center;
   align-items: flex-start;
-  gap: 20px;
+  gap: 30px;
   /* padding: 20px; */
+
 }
 
 .right-container .form-container .personal-info{
@@ -43,16 +44,16 @@ body {
 .right-container .form-container .address-grid {
   display: grid;
   grid-template-columns: 1fr 1fr; /* 2 columns of fieldsets */
-  gap: 20px;
+  gap: 30px;
   width: 70%;
-  /* display:none; */
 }
 
 .right-container .form-container fieldset {
-  padding: 10px;
+  padding: 20px;
   height: auto;
   border-radius: 10px;
   box-shadow: rgba(6, 24, 44, 0.4) 0px 0px 0px 2px, rgba(6, 24, 44, 0.65) 0px 4px 6px -1px, rgba(255, 255, 255, 0.08) 0px 1px 0px inset;
+  margin-left:20px;
 }
 
 .right-container .form-container fieldset legend {
@@ -72,16 +73,12 @@ body {
     justify-content: center;
     align-items: left;
     margin-bottom:2px;
-    /* border:1px solid red; */
 }
 
 .right-container .form-container fieldset label {
     font-weight: bold;
     margin-bottom: 5px;
-
     font-size: 0.9rem;
-    /* border:1px solid red; */
-
     padding:0;
     margin:0;
 }
@@ -90,7 +87,7 @@ body {
     padding: 2px;
     border: 1px solid #ccc;
     border-radius: 4px;
-    font-size: 0.95rem;
+    font-size: 1rem;
     /* border:1px solid red; */
 }
 
@@ -110,13 +107,21 @@ button[type="submit"]:hover {
 }
 
 .right-container .function-div{
-  width: 100%;
-  height: 10%;
+  width: 95%;
+  height: auto;
   display: flex;
   justify-content: space-between; /* left and right */
   align-items: center;
   padding: 10px 20px;
 }
+
+.left-buttons{
+  margin-left:20px;
+}
+
+/* .right-buttons{
+  margin-right:90px;
+} */
 
 
 .left-buttons button,

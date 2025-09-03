@@ -104,8 +104,8 @@ $(document).ready(function() {
         }
 
         let formData = {
-            // hpercode: $("#referral-hpercode-hidden-input").val(),
-            hpercode: 'PAT002929',
+            hpercode: $("#referral-hpercode-hidden-input").val(),
+            // hpercode: 'PAT002929',
             type: $("#classification-select").val(),
             status: "Pending", // default
             refer_to: $("#rhu-select option:selected").text(),
@@ -130,23 +130,23 @@ $(document).ready(function() {
 
         console.table(formData)
 
-        // $.ajax({
-        //     url: "../../assets/php/patient_registration_form/add_incoming_referral.php",
-        //     type: "POST",
-        //     data: formData,
-        //     dataType: "json",
-        //     success: function (response) {
-        //         console.log(response);
-        //     },
-        //     error: function (xhr, status, error) {
-        //         console.error(error);
-        //         Swal.fire({
-        //             icon: "error",
-        //             title: "Error",
-        //             text: "Something went wrong. Please try again."
-        //         });
-        //     }
-        // });
+        $.ajax({
+            url: "../../assets/php/patient_registration_form/add_incoming_referral.php",
+            type: "POST",
+            data: formData,
+            dataType: "json",
+            success: function (response) {
+                console.log(response);
+            },
+            error: function (xhr, status, error) {
+                console.error(error);
+                Swal.fire({
+                    icon: "error",
+                    title: "Error",
+                    text: "Something went wrong. Please try again."
+                });
+            }
+        });
     });
 
 });
