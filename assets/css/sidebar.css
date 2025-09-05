@@ -109,6 +109,60 @@ body {
     margin:0;
 }
 
+.sidebar-menu {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    width: 100%;
+}
+
+/* Sidebar menu items */
+.sidebar-menu li {
+    margin: 5px 0;
+}
+
+/* Links inside sidebar */
+.sidebar-menu li a {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 20px;
+    color: #ddd;
+    text-decoration: none;
+    font-size: 0.95rem;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+/* Hover effect */
+.sidebar-menu li a:hover {
+    background-color: #2e2e2e;
+    color: #fff;
+    transform: translateX(4px);
+}
+
+/* Active link (optional – add class="active" dynamically in PHP) */
+.sidebar-menu li a.active {
+    background: linear-gradient(135deg, #4F6F52, #86A789);
+    color: #fff;
+    font-weight: bold;
+}
+
+/* Small separator between groups */
+.sidebar-menu li:not(:last-child) {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+/* Icons & text alignment */
+.sidebar-menu li a::before {
+    font-size: 1rem;
+}
+
+/* Make text more readable */
+.sidebar-menu li a span {
+    flex: 1;
+}
+
 
 
 @media (max-width: 768px) {

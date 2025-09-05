@@ -5,17 +5,39 @@
         <p id="bgh-name">Bataan General Hospital and Medical Center</p>
     </div>
 
+    <?php
+        $permissions = $_SESSION['user']['permission'];
+    ?>
+
     <ul class="sidebar-menu">
-        <!-- Main Modules -->
-        <li><a href="../views/patient_registration_form.php">📄 Patient Registration</a></li>
-        <li><a href="#">📄 Incoming Referral</a></li>
-        <li><a href="#">📊 Outgoing Referral</a></li>
-        <li><a href="#">⚙ Census</a></li>
-        <li><a href="#">🛠 Admin Module</a></li>
-        <li><a href="#">📊 Dashboard – Incoming Referral</a></li>
-        <li><a href="#">📊 Dashboard – Outgoing Referral</a></li>
-        <li><a href="#">📜 History Log</a></li>
-        <li><a href="#">⚙ Settings</a></li>
-        <li><a href="#">📌 Acknowledgements</a></li>
+        <?php if (!empty($permissions['patient_registration'])): ?>
+            <li><a href="../views/patient_registration_form.php">📄 <span>Patient Registration</span></a></li>
+        <?php endif; ?>
+
+        <?php if (!empty($permissions['incoming_referral'])): ?>
+            <li><a href="#">📄 <span>Incoming Referral</span></a></li>
+            <li><a href="#">📊 <span>Dashboard – Incoming Referral</span></a></li>
+        <?php endif; ?>
+
+        <?php if (!empty($permissions['outgoing_referral'])): ?>
+            <li><a href="#">📊 <span>Outgoing Referral</span></a></li>
+            <li><a href="#">📊 <span>Dashboard – Outgoing Referral</span></a></li>
+        <?php endif; ?>
+
+        <?php if (!empty($permissions['admin_function'])): ?>
+            <li><a href="#">🛠 <span>Admin Module</span></a></li>
+        <?php endif; ?>
+
+        <?php if (!empty($permissions['history_log'])): ?>
+            <li><a href="#">📜 <span>History Log</span></a></li>
+        <?php endif; ?>
+
+        <?php if (!empty($permissions['setting'])): ?>
+            <li><a href="#">⚙ <span>Settings</span></a></li>
+        <?php endif; ?>
+
+        <li><a href="#">📌 <span>Acknowledgements</span></a></li>
     </ul>
+
+
 </div>

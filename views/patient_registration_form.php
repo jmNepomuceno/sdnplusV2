@@ -346,6 +346,8 @@
     <?php include("../assets/php/patient_registration_form/modal/referring_doctor.php") ?>
 
     <?php include("../links/script_links.php") ?>
+    <script src="../assets/websocket/script.js?v=<?php echo time(); ?>"></script>
+
     
     <script src="../assets/js/sidebar_traverse.js"></script>
     <script src="../assets/js/patient_registration_form/patient_registration_form.js?v=<?php echo time(); ?>"></script>

@@ -3,6 +3,11 @@
 
     header("Content-Type: application/json");
     date_default_timezone_set('Asia/Manila');
+
+    require "../../../vendor/autoload.php";  // Ensure Composer's autoload is included
+    use WebSocket\Client;
+
+    
     session_start();
 
     try {
@@ -192,6 +197,8 @@
                 "success" => true,
                 "message" => "Referral successfully added!"
             ]);
+
+             
         } else {
             echo json_encode([
                 "success" => false,
@@ -203,5 +210,12 @@
             "success" => false,
             "message" => "Database error: " . $e->getMessage()
         ]);
+    }
+
+    try {
+        $client = new Client("ws://10.10.90.14:8081/chat");
+        $client->send(json_encode(["action" => "sentIncomingReferral"]));
+    } catch (Exception $e) {
+        echo "WebSocket error: " . $e->getMessage();
     }
 ?>
