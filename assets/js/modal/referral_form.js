@@ -1,4 +1,7 @@
 $(document).ready(function() {
+    const modalElement = document.getElementById('referral-form-modal');
+    const referral_form_modal = bootstrap.Modal.getInstance(modalElement) 
+        || new bootstrap.Modal(modalElement);
 
     $.ajax({
         url: "../../assets/php/patient_registration_form/get_hospitals.php",
@@ -137,6 +140,22 @@ $(document).ready(function() {
             dataType: "json",
             success: function (response) {
                 console.log(response);
+                if (response.success) {
+                    Swal.fire({
+                        icon: "success",
+                        title: "Referral Added",
+                        text: "The referral has been successfully recorded.",
+                        timer: 2000,
+                        showConfirmButton: false
+                    });
+                    
+                } else {
+                    Swal.fire({
+                        icon: "warning",
+                        title: "Notice",
+                        text: response.message || "Referral was not added."
+                    });
+                }
             },
             error: function (xhr, status, error) {
                 console.error(error);

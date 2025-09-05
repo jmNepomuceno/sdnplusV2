@@ -1,21 +1,5 @@
 $(document).ready(function() {
 
-    socket.onmessage = function(event) {
-        let data = JSON.parse(event.data);
-        console.log("Received from WebSocket:", data); // Debugging
-
-        // Call fetchNotifValue() on every process update
-        switch (data.action) {
-            case "sentIncomingReferral":
-                console.log(468)
-                // fetchNotifValue()
-                // dataTable_incoming_request();  
-                break;
-            default:
-                console.log("Unknown action:", data.action);
-        }
-    };
-
     // Load data via AJAX
     var fetch_incomingReferrals = () => {
 
@@ -24,7 +8,6 @@ $(document).ready(function() {
             method: "GET",
             dataType: "json",
             success: function (classificationColors) {
-
                 $.ajax({
                     url: '../../assets/php/incoming_referral/get_incoming_referrals.php',
                     method: "GET",
@@ -32,6 +15,8 @@ $(document).ready(function() {
                     success: function (response) {
                         let referrals = response.data || [];
                         let dataSet = [];
+
+                        console.log(console.table(referrals))
 
                         for (let i = 0; i < referrals.length; i++) {
                             let item = referrals[i];
@@ -54,6 +39,14 @@ $(document).ready(function() {
                                     <span class="small"><b>Referred by:</b> ${item.referred_by || 'N/A'}</span><br>
                                     <span class="small"><b>Landline:</b> ${item.landline_no || 'N/A'}</span><br>
                                     <span class="small"><b>Mobile:</b> ${item.mobile_no || 'N/A'}</span>
+
+                                    <div class="contact-extra">
+                                        <hr>
+                                        <span class="small"><b>Director:</b> ${item.hospital_director || 'N/A'}  </span><br>
+                                        <span class="small"><b>Director No.:</b> ${item.hospital_director_mobile || 'N/A'}  </span><br>
+                                        <span class="small"><b>Point Person:</b> ${item.hospital_point_person || 'N/A'} </span><br>
+                                        <span class="small"><b>Point Person No.:</b> ${item.hospital_point_person_mobile || 'N/A'} </span>
+                                    </div>
                                 </div>`,
 
                                 `<div class="datetime-info-div small">
@@ -146,6 +139,21 @@ $(document).ready(function() {
         
     };
 
+    socket.onmessage = function(event) {
+        let data = JSON.parse(event.data);
+        console.log("Received from WebSocket:", data); // Debugging
+
+        // Call fetchNotifValue() on every process update
+        switch (data.action) {
+            case "sentIncomingReferral":
+                console.log(468)
+                fetch_incomingReferrals();
+                break;
+            default:
+                console.log("Unknown action:", data.action);
+        }
+    };
+
 
     // Call the function on page load
     fetch_incomingReferrals();
@@ -156,6 +164,19 @@ $(document).ready(function() {
         alert("Start processing referral: " + refNo);
         // TODO: AJAX update to set status = "Processing"
     });
+
+    // When "More Details" is clicked
+    $(document).on("click", ".view-details", function () {
+        let refNo = $(this).data("ref");
+
+        // Find the .contact-extra inside the same row
+        let contactExtra = $(this).closest("tr").find(".contact-extra");
+        // Toggle visibility
+        if (contactExtra.length) {
+            contactExtra.slideToggle(); // animation
+        }
+    });
+
 });
 
 //

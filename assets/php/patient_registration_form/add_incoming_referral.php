@@ -193,6 +193,14 @@
             $stmt = $pdo->prepare("UPDATE hperson SET status = 'Pending', type=:type WHERE hpercode = :hpercode");
             $stmt->execute([':hpercode' => $hpercode, ':type' => $type]);
 
+            // update the referral_id for the hperson, but as a JSON
+            // initialize first
+            $stmt = $pdo->prepare("UPDATE hperson SET referral_id = IFNULL(referral_id, JSON_ARRAY()) WHERE hpercode=:hpercode");
+            $stmt->execute([':hpercode' => $hpercode]);
+
+            $stmt = $pdo->prepare("UPDATE hperson SET referral_id = JSON_ARRAY_APPEND(referral_id, '$', :referral_id) WHERE hpercode=:hpercode");
+            $stmt->execute([':hpercode' => $hpercode, ':referral_id' => $referral_id]);
+
             echo json_encode([
                 "success" => true,
                 "message" => "Referral successfully added!"
@@ -218,4 +226,5 @@
     } catch (Exception $e) {
         echo "WebSocket error: " . $e->getMessage();
     }
+
 ?>

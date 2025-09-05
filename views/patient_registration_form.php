@@ -15,6 +15,8 @@
     <link rel="stylesheet" href="../assets/css/patient_registration.css">
     <link rel="stylesheet" href="../assets/css/navbar.css">
     
+    <!-- SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 <body>
 

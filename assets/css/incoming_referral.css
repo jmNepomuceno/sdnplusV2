@@ -182,6 +182,11 @@ body {
     color: #d62828;
 }
 
+.contact-extra {
+    display: none;
+    margin-top: 5px;
+}
+
 /* === Status Badges === */
 .status-badge {
     display: inline-block;
