@@ -1,4 +1,7 @@
-$(document).ready(function() {    // Load data via AJAX
+$(document).ready(function() {    
+    let patient_referral_modal = new bootstrap.Modal(document.getElementById('patient-referral-modal'));
+    patient_referral_modal.show();
+    // Load data via AJAX
     var fetch_incomingReferrals = () => {
         $.ajax({
             url: '../../assets/php/incoming_referral/get_classification_color.php',
@@ -189,13 +192,17 @@ $(document).ready(function() {    // Load data via AJAX
                 (seconds < 10 ? "0" : "") + seconds;
 
             timerCell.text("Processing: " + formatted);
+
+            // 🚨 If elapsed >= 15 minutes (900000 ms), turn text red
+            if (elapsed >= 15 * 60 * 1000) {
+                timerCell.removeClass("text-dark").addClass("text-danger fw-bold");
+            }
         }
 
         update();
-
-        // Store interval reference
         activeTimers[elementId] = setInterval(update, 1000);
     }
+
 
 
 

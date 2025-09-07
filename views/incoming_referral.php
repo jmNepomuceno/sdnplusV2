@@ -110,11 +110,13 @@
     </div>
 
     <?php include("../links/script_links.php") ?>
+
+    <?php include("../assets/php/incoming_referral/modal/referral_information_form.php") ?>
+
     <script src="../assets/websocket/script.js?v=<?php echo time(); ?>"></script>
 
 
     <script src="../assets/js/sidebar_traverse.js"></script>
-
     <script src="../assets/js/incoming_referral/incoming_referral.js?v=<?php echo time(); ?>"></script>
 </body>
 </html>
