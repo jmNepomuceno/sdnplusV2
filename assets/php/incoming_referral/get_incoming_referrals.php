@@ -9,6 +9,7 @@
         $sql = "
             SELECT 
                 r.reference_num,
+                r.referral_id,
                 CONCAT(hp.patlast, ', ', hp.patfirst, ' ', COALESCE(hp.patmiddle, '')) AS patient_name,
                 
                 CONCAT(
@@ -25,6 +26,7 @@
                 r.mobile_no,
                 r.date_time,
                 r.status,
+                r.reception_time,
 
             sh.hospital_director,
             sh.hospital_director_mobile,
@@ -43,7 +45,7 @@
             LEFT JOIN bghmc.sdn_hospital sh 
                 ON r.referred_by = sh.hospital_name
 
-            WHERE r.status = 'Pending'
+            WHERE r.status IN ('Pending', 'On-Process')
             ORDER BY r.date_time DESC
         ";
 

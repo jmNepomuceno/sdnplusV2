@@ -1,8 +1,5 @@
-$(document).ready(function() {
-
-    // Load data via AJAX
+$(document).ready(function() {    // Load data via AJAX
     var fetch_incomingReferrals = () => {
-
         $.ajax({
             url: '../../assets/php/incoming_referral/get_classification_color.php',
             method: "GET",
@@ -16,10 +13,21 @@ $(document).ready(function() {
                         let referrals = response.data || [];
                         let dataSet = [];
 
-                        console.log(console.table(referrals))
+                        console.log(referrals); // Debugging
 
                         for (let i = 0; i < referrals.length; i++) {
                             let item = referrals[i];
+
+                            let referred = item.date_time ? new Date(item.date_time) : null;
+                            let reception = item.reception_time ? new Date(item.reception_time) : null;
+
+                            let interval = "";
+                            if (referred && reception) {
+                                let diff = Math.floor((reception - referred) / 1000); // in seconds
+                                let mins = String(Math.floor(diff / 60)).padStart(2, '0');
+                                let secs = String(diff % 60).padStart(2, '0');
+                                interval = ` <span class="interval-span">(${mins}:${secs})</span>`;
+                            }
 
                             dataSet.push([
                                 `<span class="ref-no-span">${item.reference_num}</span>`,
@@ -32,7 +40,6 @@ $(document).ready(function() {
                                     </div>
                                 </div>`,
 
-                                // just text/div, no background here
                                 `<div class="type-info-div">${item.type}</div>`,
 
                                 `<div class="agency-info-div">
@@ -51,19 +58,26 @@ $(document).ready(function() {
 
                                 `<div class="datetime-info-div small">
                                     <span><b>Referred:</b> ${item.date_time || '-'}</span><br>
-                                    <span><b>Reception:</b> ${item.reception_time || '-'}</span><br>
+                                    <span><b>Reception:</b> ${item.reception_time || '-'}${interval}</span><br>
                                     <span class="text-success"><b>Processed:</b> ${item.processed_time || '-'}</span>
                                 </div>`,
 
-                                `<span class="response-time badge bg-warning text-dark">Processing: 00:00:00</span>`,
+                                // 🔹 Add data-referral_id for timer tracking
+                                `<span class="response-time badge bg-warning text-dark" 
+                                    id="response-time-${item.referral_id}" 
+                                    data-reception_time="${item.reception_time || ''}" 
+                                    data-approval_time="${item.approval_time || ''}" 
+                                    data-deferred_time="${item.deferred_time || ''}">
+                                    Processing: 00:00:00
+                                </span>`,
 
                                 `<span class="status-badge badge bg-secondary">${item.status}</span>`,
 
                                 `<div class="action-buttons">
-                                    <button class="btn btn-sm btn-outline-primary start-process" data-ref="${item.reference_num}">
+                                    <button class="btn btn-sm btn-outline-primary start-process" data-referral_id="${item.referral_id}">
                                         <i class="fa fa-pencil"></i> Process
                                     </button>
-                                    <button class="btn btn-sm btn-outline-info view-details" data-ref="${item.reference_num}">
+                                    <button class="btn btn-sm btn-outline-info view-details" data-referral_id="${item.referral_id}">
                                         <i class="fa fa-eye"></i> More Details
                                     </button>
                                 </div>`
@@ -95,9 +109,7 @@ $(document).ready(function() {
                                     targets: 2, 
                                     createdCell: function(td, cellData, rowData, row, col) {
                                         $(td).addClass('type-td');
-                                        // get the type text from the rowData
                                         let typeText = $(td).text().trim();
-                                        // lookup color
                                         let bgColor = classificationColors[typeText] || "#ccc";
                                         $(td).css({
                                             "background-color": bgColor,
@@ -122,6 +134,19 @@ $(document).ready(function() {
                             searching: false,
                             autoWidth: false,
                         });
+
+                        // 🔹 After rendering table, re-init timers
+                        $(".response-time").each(function () {
+                            let $this = $(this);
+                            let reception = $this.data("reception_time");
+                            let approval = $this.data("approval_time");
+                            let deferred = $this.data("deferred_time");
+
+                            if (reception && !approval && !deferred) {
+                                startTimer($this, reception); // pass jQuery object + reception_time
+                            }
+                        });
+
                     },
                     error: function (xhr, status, error) {
                         console.error("AJAX request failed:", error);
@@ -133,11 +158,46 @@ $(document).ready(function() {
                 console.error("AJAX request failed:", error);
             }
         });
-
-
-
-        
     };
+
+    // 🔹 Timer function (global)
+    // 🔹 Timer function (only one version)
+    // Global map to track running timers
+    let activeTimers = {};
+
+    function startTimer(timerCell, startTime) {
+        let elementId = timerCell.attr("id");
+
+        // 🚫 If already running, do nothing
+        if (activeTimers[elementId]) {
+            return;
+        }
+
+        let start = new Date(startTime).getTime();
+
+        function update() {
+            let now = new Date().getTime();
+            let elapsed = now - start;
+
+            let hours = Math.floor(elapsed / (1000 * 60 * 60));
+            let minutes = Math.floor((elapsed % (1000 * 60 * 60)) / (1000 * 60));
+            let seconds = Math.floor((elapsed % (1000 * 60)) / 1000);
+
+            let formatted =
+                (hours < 10 ? "0" : "") + hours + ":" +
+                (minutes < 10 ? "0" : "") + minutes + ":" +
+                (seconds < 10 ? "0" : "") + seconds;
+
+            timerCell.text("Processing: " + formatted);
+        }
+
+        update();
+
+        // Store interval reference
+        activeTimers[elementId] = setInterval(update, 1000);
+    }
+
+
 
     socket.onmessage = function(event) {
         let data = JSON.parse(event.data);
@@ -158,13 +218,6 @@ $(document).ready(function() {
     // Call the function on page load
     fetch_incomingReferrals();
 
-    // Example event handler for process button
-    $(document).on("click", ".start-process", function() {
-        let refNo = $(this).data("ref");
-        alert("Start processing referral: " + refNo);
-        // TODO: AJAX update to set status = "Processing"
-    });
-
     // When "More Details" is clicked
     $(document).on("click", ".view-details", function () {
         let refNo = $(this).data("ref");
@@ -176,6 +229,67 @@ $(document).ready(function() {
             contactExtra.slideToggle(); // animation
         }
     });
+
+
+    // processing referral
+    $(document).on("click", ".start-process", function () {
+        let referralId = $(this).data("referral_id");
+        let button = $(this);
+
+        let row = button.closest("tr");
+        let timerCell = row.find(".response-time");
+        let elementId = timerCell.attr("id");
+
+        // 🚫 Prevent duplicate timers
+        if (activeTimers[elementId]) {
+            console.log("Timer already running for referral_id:", referralId);
+            return;
+        }
+
+        $.ajax({
+            url: "../../assets/php/incoming_referral/start_process.php",
+            type: "POST",
+            data: { referral_id: referralId },
+            success: function (response) {
+                if (response.success) {
+                    let startTime = new Date(response.reception_time);
+                    startTimer(timerCell, startTime);
+
+                    row.find(".status-badge")
+                        .removeClass("bg-secondary")
+                        .addClass("bg-warning")
+                        .text("In Progress");
+                } else {
+                    Swal.fire("Error", response.message, "error");
+                }
+            },
+            error: function () {
+                Swal.fire("Error", "Server error starting process", "error");
+            }
+        });
+    });
+
+
+    // $(document).on("click", ".complete-process", function () {
+    //     let referralId = $(this).data("refid");
+    //     let row = $(this).closest("tr");
+
+    //     $.ajax({
+    //         url: "../../assets/php/referrals/complete_process.php",
+    //         type: "POST",
+    //         data: { referral_id: referralId, result: "Approved" },
+    //         success: function (response) {
+    //             if (response.success) {
+    //                 row.fadeOut(500, function () {
+    //                     row.remove();
+    //                 });
+    //             } else {
+    //                 Swal.fire("Error", response.message, "error");
+    //             }
+    //         }
+    //     });
+    // });
+
 
 });
 

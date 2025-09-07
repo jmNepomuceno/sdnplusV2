@@ -235,3 +235,11 @@ body {
     background: #1d3557;
 }
 
+.interval-span {
+    color: orange;
+    font-size: 0.75em;  /* smaller than normal text */
+    font-weight: bold;
+    margin-left: 4px;   /* little spacing from reception time */
+}
+
+
