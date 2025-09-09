@@ -242,4 +242,16 @@ body {
     margin-left: 4px;   /* little spacing from reception time */
 }
 
+/* Custom XXL Modal */
+.modal-xxl {
+  max-width: 75% !important; 
+  width: 75%;
+}
+
+@media (min-width: 1200px) {
+  .modal-xxl {
+    max-width: 70% !important;
+  }
+}
+
 

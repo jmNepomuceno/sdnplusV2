@@ -247,16 +247,23 @@ $(document).ready(function() {
         let timerCell = row.find(".response-time");
         let elementId = timerCell.attr("id");
 
-        // 🚫 Prevent duplicate timers
+        // ✅ Check if timer is already running
         if (activeTimers[elementId]) {
             console.log("Timer already running for referral_id:", referralId);
+
+            // Still fetch details and open modal
+            fetchReferralDetails(referralId);
+
+            $("#patient-referral-modal").modal("show");
             return;
         }
 
+        // 🚀 Start process in DB + start timer
         $.ajax({
             url: "../../assets/php/incoming_referral/start_process.php",
             type: "POST",
             data: { referral_id: referralId },
+            dataType: "json",
             success: function (response) {
                 if (response.success) {
                     let startTime = new Date(response.reception_time);
@@ -266,6 +273,12 @@ $(document).ready(function() {
                         .removeClass("bg-secondary")
                         .addClass("bg-warning")
                         .text("In Progress");
+
+                    // ✅ Fetch referral details for modal
+                    fetchReferralDetails(referralId);
+
+                    // ✅ Finally, show modal
+                    $("#patient-referral-modal").modal("show");
                 } else {
                     Swal.fire("Error", response.message, "error");
                 }
@@ -275,6 +288,66 @@ $(document).ready(function() {
             }
         });
     });
+
+
+    // ♻️ Reusable function to fetch details
+    function fetchReferralDetails(referralId) {
+        $.ajax({
+            url: "../../assets/php/incoming_referral/get_referral_details.php",
+            type: "POST",
+            data: { referral_id: referralId },
+            dataType: "json",
+            success: function(response) {
+                console.log(response);
+                if (response.success) {
+                    let p = response.patient;
+                    let r = response.referral;
+
+                    // Fill Patient Info
+                    $("#hpercode-span b").text(p.hpercode);
+                    $("#status-span b").text(p.status);
+                    $("#referred-by-span").text(p.referred_by);
+                    $("#pat-mobile-no-span").text(p.pat_mobile_no);
+                    $("#patlast-span").text(p.patlast);
+                    $("#patfirst-span").text(p.patfirst);
+                    $("#patmiddle-span").text(p.patmiddle);
+                    $("#patsuffix-span").text(p.patsuffix);
+                    $("#pat-age-span").text(p.pat_age);
+                    $("#pat-gender-span").text(p.patsex);
+                    $("#pat-civil-status-span").text(p.patcstat);
+                    $("#pat-religion-span").text(p.relcode);
+                    $("#pat-mobile-no-span").text(p.pat_mobile_no);
+
+                    // Referral Info
+                    $("#ref-id-span").text(r.referral_id);
+                    $("#reception-time-span").text(r.reception_time);
+                    $("#processed-by-span").text(r.processed_by);
+
+                    // Physical Exam
+                    $("#bp-span").text(r.bp);
+                    $("#hr-span").text(r.hr);
+                    $("#rr-span").text(r.rr);
+                    $("#temp-span").text(r.temp);
+                    $("#weight-span").text(r.weight);
+
+                    // Textareas
+                    $("#icd-diagnosis-span").val(r.icd_diagnosis);
+                    $("#subjective-span").val(r.chief_complaint_history);
+                    $("#objective-span").val(r.pertinent_findings);
+                    $("#assessment-span").val(r.diagnosis);
+                    $("#plan-span").val(r.plan);
+                    $("#patlast-span").val(r.remarks);
+                } else {
+                    Swal.fire("Error", response.message, "error");
+                }
+            },
+            error: function () {
+                Swal.fire("Error", "Failed to fetch referral details", "error");
+            }
+        });
+    }
+
+
 
 
     // $(document).on("click", ".complete-process", function () {

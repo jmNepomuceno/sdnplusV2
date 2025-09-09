@@ -29,6 +29,7 @@
     <link rel="stylesheet" href="../assets/css/sidebar.css">
     <link rel="stylesheet" href="../assets/css/incoming_referral.css">
     <link rel="stylesheet" href="../assets/css/navbar.css">
+    <link rel="stylesheet" href="../assets/css/modal/referral_information_form.css">
 </head>
 <body>
 
@@ -118,5 +119,6 @@
 
     <script src="../assets/js/sidebar_traverse.js"></script>
     <script src="../assets/js/incoming_referral/incoming_referral.js?v=<?php echo time(); ?>"></script>
+    <script src="../assets/js/modal/referral_information_form.js?v=<?php echo time(); ?>"></script>
 </body>
 </html>
