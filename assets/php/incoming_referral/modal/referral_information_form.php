@@ -118,7 +118,7 @@
                     <div class="right-row-div">
                         <div class="right-row-div-a">
                             <span class="title-span-form">Case Number: </span>
-                            <span class="value-span-form" id="ref-id-span">REF000056</span>
+                            <span class="value-span-form" id="ref-id-span"><b>REF000056</b></span>
                         </div>
                         <div class="right-row-div-b">
                             <span class="title-span-form">Select Response Status: </span>
@@ -182,17 +182,17 @@
 
             <div class="card shadow-sm border-0 approval-form-div">
                 <div class="card-header bg-primary text-white">
-                    <h6 class="mb-0">Approval Form</h6>
+                    <h6 class="mb-0" id="approval-deferral-form-title">Approval Form</h6>
                 </div>
 
                 <div class="card-body bg-light">
                     <div class="mb-3">
                         <label class="form-label fw-bold">Case Category</label>
-                        <select class="form-select">
+                        <select class="form-select" id="category-approval-select">
                             <option value="">Select</option>
-                            <option value="primary">Primary</option>
-                            <option value="secondary">Secondary</option>
-                            <option value="tertiary">Tertiary</option>
+                            <option value="Primary">Primary</option>
+                            <option value="Secondary">Secondary</option>
+                            <option value="Tertiary">Tertiary</option>
                         </select>
                     </div>
 
@@ -213,7 +213,7 @@
                 </div>
 
                 <div class="card-footer text-end bg-light">
-                    <button type="button" class="btn btn-success px-4">Approve</button>
+                    <button type="button" class="btn btn-success px-4" id="approve-deferred-submit-btn">Approve</button>
                 </div>
             </div>
 

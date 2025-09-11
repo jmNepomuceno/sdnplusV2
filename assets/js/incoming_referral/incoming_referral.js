@@ -1,6 +1,6 @@
 $(document).ready(function() {    
     let patient_referral_modal = new bootstrap.Modal(document.getElementById('patient-referral-modal'));
-    patient_referral_modal.show();
+    // patient_referral_modal.show();
     // Load data via AJAX
     var fetch_incomingReferrals = () => {
         $.ajax({
@@ -141,12 +141,13 @@ $(document).ready(function() {
                         // 🔹 After rendering table, re-init timers
                         $(".response-time").each(function () {
                             let $this = $(this);
+                            let referralId = $this.attr("id").replace("response-time-", "");
                             let reception = $this.data("reception_time");
                             let approval = $this.data("approval_time");
                             let deferred = $this.data("deferred_time");
 
                             if (reception && !approval && !deferred) {
-                                startTimer($this, reception); // pass jQuery object + reception_time
+                                startTimer(referralId, reception);
                             }
                         });
 
@@ -168,15 +169,11 @@ $(document).ready(function() {
     // Global map to track running timers
     let activeTimers = {};
 
-    function startTimer(timerCell, startTime) {
-        let elementId = timerCell.attr("id");
+    function startTimer(referralId, reception_time) {
+        // ⛔ If already running, do nothing
+        if (activeTimers[referralId]) return;
 
-        // 🚫 If already running, do nothing
-        if (activeTimers[elementId]) {
-            return;
-        }
-
-        let start = new Date(startTime).getTime();
+        let start = new Date(reception_time).getTime();
 
         function update() {
             let now = new Date().getTime();
@@ -191,20 +188,21 @@ $(document).ready(function() {
                 (minutes < 10 ? "0" : "") + minutes + ":" +
                 (seconds < 10 ? "0" : "") + seconds;
 
-            timerCell.text("Processing: " + formatted);
+            // 🔄 Always find the latest span after refresh
+            let $el = $(`#response-time-${referralId}`);
+            if ($el.length) {
+                $el.text("Processing: " + formatted);
 
-            // 🚨 If elapsed >= 15 minutes (900000 ms), turn text red
-            if (elapsed >= 15 * 60 * 1000) {
-                timerCell.removeClass("text-dark").addClass("text-danger fw-bold");
+                // 🚨 If elapsed >= 15 minutes
+                if (elapsed >= 15 * 60 * 1000) {
+                    $el.removeClass("text-dark").addClass("text-danger fw-bold");
+                }
             }
         }
 
         update();
-        activeTimers[elementId] = setInterval(update, 1000);
+        activeTimers[referralId] = setInterval(update, 1000);
     }
-
-
-
 
     socket.onmessage = function(event) {
         let data = JSON.parse(event.data);
@@ -239,7 +237,7 @@ $(document).ready(function() {
 
 
     // processing referral
-    $(document).on("click", ".start-process", function () {
+   $(document).on("click", ".start-process", function () {
         let referralId = $(this).data("referral_id");
         let button = $(this);
 
@@ -247,13 +245,21 @@ $(document).ready(function() {
         let timerCell = row.find(".response-time");
         let elementId = timerCell.attr("id");
 
-        // ✅ Check if timer is already running
-        if (activeTimers[elementId]) {
-            console.log("Timer already running for referral_id:", referralId);
+        // ✅ Update Referral Status in modal (frontend only)
+        $(".value-span-form[data-field='referral_status']").text("On-Process");
 
-            // Still fetch details and open modal
+        // ✅ Set Select placeholder to On-Process
+        $("#select-response-status").html(`
+            <option value="On-Process" selected>On-Process</option>
+            <option value="Approved">Approve</option>
+            <option value="Deferred">Defer</option> 
+            <option value="Interdepartamental" disabled>Interdepartamental Referral</option>
+        `);
+
+        // ✅ If timer already running, just fetch details + show modal
+        if (activeTimers[referralId]) {
             fetchReferralDetails(referralId);
-
+            $("#approve-deferred-submit-btn").data("refid", referralId);
             $("#patient-referral-modal").modal("show");
             return;
         }
@@ -267,17 +273,15 @@ $(document).ready(function() {
             success: function (response) {
                 if (response.success) {
                     let startTime = new Date(response.reception_time);
-                    startTimer(timerCell, startTime);
+                    startTimer(referralId, startTime);
 
                     row.find(".status-badge")
                         .removeClass("bg-secondary")
                         .addClass("bg-warning")
                         .text("In Progress");
 
-                    // ✅ Fetch referral details for modal
                     fetchReferralDetails(referralId);
-
-                    // ✅ Finally, show modal
+                    $("#approve-deferred-submit-btn").data("refid", referralId);
                     $("#patient-referral-modal").modal("show");
                 } else {
                     Swal.fire("Error", response.message, "error");
@@ -288,6 +292,9 @@ $(document).ready(function() {
             }
         });
     });
+
+    
+
 
 
     // ♻️ Reusable function to fetch details
@@ -319,7 +326,7 @@ $(document).ready(function() {
                     $("#pat-mobile-no-span").text(p.pat_mobile_no);
 
                     // Referral Info
-                    $("#ref-id-span").text(r.referral_id);
+                    $("#ref-id-span b").text(r.referral_id);
                     $("#reception-time-span").text(r.reception_time);
                     $("#processed-by-span").text(r.processed_by);
 
@@ -350,25 +357,46 @@ $(document).ready(function() {
 
 
 
-    // $(document).on("click", ".complete-process", function () {
-    //     let referralId = $(this).data("refid");
-    //     let row = $(this).closest("tr");
+    $(document).on("click", "#approve-deferred-submit-btn", function () {
+        let referralId = $(this).data("refid");
+        let result = $("#select-response-status").val(); // either Approved or Deferred
+        let row = $(this).closest("tr");
 
-    //     $.ajax({
-    //         url: "../../assets/php/referrals/complete_process.php",
-    //         type: "POST",
-    //         data: { referral_id: referralId, result: "Approved" },
-    //         success: function (response) {
-    //             if (response.success) {
-    //                 row.fadeOut(500, function () {
-    //                     row.remove();
-    //                 });
-    //             } else {
-    //                 Swal.fire("Error", response.message, "error");
-    //             }
-    //         }
-    //     });
-    // });
+        console.log(referralId, result, row)
+
+        $.ajax({
+            url: '../../assets/php/incoming_referral/complete_process.php',
+            type: "POST",
+            data: { 
+                referral_id: referralId, 
+                result: result,
+                pat_class : $('#category-approval-select').val(),
+                approval_details : $('#er-action').val()
+             },
+            dataType: "json",
+            success: function (response) {
+                console.log(response)
+                if (response.success) {
+                    if (activeTimers[referralId]) {
+                        clearInterval(activeTimers[referralId]);
+                        delete activeTimers[referralId];
+                    }
+                    row.fadeOut(500, function () {
+                        row.remove();
+                    });
+                    Swal.fire("Success", "Referral marked as " + result, "success");
+                    fetch_incomingReferrals()
+                    $("#patient-referral-modal").modal("hide");
+                } else {
+                    Swal.fire("Error", response.message, "error");
+                }
+            },
+            error: function () {
+                Swal.fire("Error", "Server error completing process", "error");
+            }
+        });
+    });
+
 
 
 });
