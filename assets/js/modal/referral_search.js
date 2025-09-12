@@ -1,4 +1,26 @@
 $(document).ready(function() {
+    // Populate Case Type
+    $.getJSON("../../assets/php/patient_registration_form/get_classifications.php", function (response) {
+        if (response.success) {
+            response.data.forEach(item => {
+                $("#case_type").append(
+                    `<option value="${item.class_code}">${item.classifications}</option>`
+                );
+            });
+        }
+    });
+
+    // Populate Agency
+    $.getJSON("../../assets/php/patient_registration_form/get_hospitals.php", function (response) {
+        if (Array.isArray(response)) {
+            response.forEach(item => {
+                $("#agency").append(
+                    `<option value="${item.hospital_code}">${item.hospital_name}</option>`
+                );
+            });
+        }
+    });
+
     $("#referral-search-form").on("submit", function (e) {
         e.preventDefault(); // prevent form submit reload
 
@@ -17,50 +39,6 @@ $(document).ready(function() {
         };
 
         console.table(formData)
-
-        // $.ajax({
-        //     url: "../../assets/php/incoming_referral/search_referrals.php",
-        //     type: "POST",
-        //     data: formData,
-        //     dataType: "json",
-        //     success: function (response) {
-        //         if (response.success) {
-        //             let dataSet = [];
-        //             response.data.forEach(item => {
-        //                 dataSet.push([
-        //                     item.reference_num,
-        //                     `${item.last_name}, ${item.first_name} ${item.middle_name || ''}`,
-        //                     item.case_type,
-        //                     item.agency,
-        //                     item.status,
-        //                     `<button class="btn btn-sm btn-outline-primary view-referral" data-id="${item.referral_id}">
-        //                         <i class="fa fa-eye"></i> View
-        //                     </button>`
-        //                 ]);
-        //             });
-
-        //             if ($.fn.DataTable.isDataTable("#incomingReferralsTable")) {
-        //                 $("#incomingReferralsTable").DataTable().clear().rows.add(dataSet).draw();
-        //             } else {
-        //                 $("#incomingReferralsTable").DataTable({
-        //                     data: dataSet,
-        //                     columns: [
-        //                         { title: "Referral No." },
-        //                         { title: "Patient Name" },
-        //                         { title: "Case Type" },
-        //                         { title: "Agency" },
-        //                         { title: "Status" },
-        //                         { title: "Action" }
-        //                     ]
-        //                 });
-        //             }
-        //         } else {
-        //             Swal.fire("No Results", response.message, "info");
-        //         }
-        //     },
-        //     error: function () {
-        //         Swal.fire("Error", "Search request failed", "error");
-        //     }
-        // });
+        fetch_incomingReferrals("../../assets/php/incoming_referral/search_referrals.php", formData);
     });
 })

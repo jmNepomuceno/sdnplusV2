@@ -35,7 +35,6 @@
             "patient" => [
                 "hpercode"    => $referral["hpercode"],
                 "referral_status" => $referral["status"] ?? "N/A",
-                "referred_by"   => $referral["referred_by"] ?? "N/A",
                 "pat_mobile_no"     => $referral["pat_mobile_no"] ?? "N/A",
                 "patlast"     => $referral["patlast"],
                 "patfirst"    => $referral["patfirst"],
@@ -62,7 +61,11 @@
                 "pertinent_findings"     => $referral["pertinent_findings"],
                 "diagnosis"          => $referral["diagnosis"],
                 "plan" => $referral["reason"],
-                "remarks"       => $referral["remarks"]
+                "remarks"       => $referral["remarks"],
+                "referred_by"   => $referral["referred_by"],
+                "referring_doctor" => $referral["referring_doctor"],
+                "referring_doctor_mobile" => $referral['referred_by_no'],
+                "type" => $referral['type'],
             ]
         ];
 

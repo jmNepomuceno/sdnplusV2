@@ -16,99 +16,99 @@
 
                     <div class="left-row-div">
                         <span class="title-span-form">Patient ID: </span>
-                        <span class="value-span-form" id="hpercode-span"><b>PAT000056</b></span>
+                        <span class="value-span-form" id="hpercode-span"><b>-</b></span>
                     </div>
 
                     <div class="left-row-div">
                         <span class="title-span-form">Referral Status: </span>
-                        <span class="value-span-form" id="status-span"><b>APPROVED</b></span>
+                        <span class="value-span-form" id="status-span"><b>-</b></span>
                     </div>
 
                     <div class="left-row-div">
                         <span class="title-span-form">Referring Agency: </span>
-                        <span class="value-span-form" id="referred-by-span">MARIVELES NATIONAL HOSPITAL</span>
+                        <span class="value-span-form" id="referred-agency-span">-</span>
                     </div>
 
                     <div class="left-row-div">
                         <span class="title-span-form">Referred By: </span>
-                        <span class="value-span-form" id="referred-by-span">PAT000056</span>
+                        <span class="value-span-form" id="referred-by-span">-</span>
                     </div>
 
                     <div class="left-row-div">
                         <span class="title-span-form">Mobile Number: </span>
-                        <span class="value-span-form" id="doc-mobile-no-span">0919-6044-820</span>
+                        <span class="value-span-form" id="doc-mobile-no-span">-</span>
                     </div>
 
                     <div class="left-row-div">
                         <span class="title-span-form">Last Name: </span>
-                        <span class="value-span-form" id="patlast-span">Nepomuceno</span>
+                        <span class="value-span-form" id="patlast-span">-</span>
                     </div>
 
                     <div class="left-row-div">
                         <span class="title-span-form">First Name: </span>
-                        <span class="value-span-form" id="patfirst-span">John Marvin</span>
+                        <span class="value-span-form" id="patfirst-span">-</span>
                     </div>
 
                     <div class="left-row-div">
                         <span class="title-span-form">Middle Name: </span>
-                        <span class="value-span-form" id="patmiddle-span">Gomez</span>
+                        <span class="value-span-form" id="patmiddle-span">-</span>
                     </div>
 
                     <div class="left-row-div">
                         <span class="title-span-form">Extension Name: </span>
-                        <span class="value-span-form" id="patsuffix-span">N/A</span>
+                        <span class="value-span-form" id="patsuffix-span">-</span>
                     </div>
 
                     <div class="left-row-div">
                         <span class="title-span-form">Age: </span>
-                        <span class="value-span-form" id="pat-age-span">13</span>
+                        <span class="value-span-form" id="pat-age-span">-</span>
                     </div>
 
                     <div class="left-row-div">
                         <span class="title-span-form">Gender: </span>
-                        <span class="value-span-form" id="pat-gender-span">Male</span>
+                        <span class="value-span-form" id="pat-gender-span">-</span>
                     </div>
 
                     <div class="left-row-div">
                         <span class="title-span-form">Civil Status: </span>
-                        <span class="value-span-form" id="pat-civil-status-span">Single</span>
+                        <span class="value-span-form" id="pat-civil-status-span">-</span>
                     </div>
 
                     <div class="left-row-div">
                         <span class="title-span-form">Religion: </span>
-                        <span class="value-span-form" id="pat-religion-span">Roman Catholic</span>
+                        <span class="value-span-form" id="pat-religion-span">-</span>
                     </div>
 
                     <div class="left-row-div">
                         <span class="title-span-form">Contact No.: </span>
-                        <span class="value-span-form" id="pat-mobile-no-span">0919-6044-820</span>
+                        <span class="value-span-form" id="pat-mobile-no-span"-</span>
                     </div>
 
                     <div class="header-row-div">PHYSICAL EXAMINATION</div>
 
                     <div class="left-row-div">
                         <span class="title-span-form">Blood Pressure: </span>
-                        <span class="value-span-form" id="bp-span">PAT000056</span>
+                        <span class="value-span-form" id="bp-span">-</span>
                     </div>
 
                     <div class="left-row-div">
                         <span class="title-span-form">Heart Rate (HR): </span>
-                        <span class="value-span-form" id="hr-span">PAT000056</span>
+                        <span class="value-span-form" id="hr-span">-</span>
                     </div>
 
                     <div class="left-row-div">
                         <span class="title-span-form">Respiratory Rate (RR): </span>
-                        <span class="value-span-form" id="rr-span">PAT000056</span>
+                        <span class="value-span-form" id="rr-span">-</span>
                     </div>
 
                     <div class="left-row-div">
                         <span class="title-span-form">Body Temperature: </span>
-                        <span class="value-span-form" id="temp-span">PAT000056</span>
+                        <span class="value-span-form" id="temp-span">-</span>
                     </div>
 
                     <div class="left-row-div">
                         <span class="title-span-form">Weight: </span>
-                        <span class="value-span-form" id="weight-span">PAT000056</span>
+                        <span class="value-span-form" id="weight-span">-</span>
                     </div>
                 </div>
 
@@ -118,7 +118,7 @@
                     <div class="right-row-div">
                         <div class="right-row-div-a">
                             <span class="title-span-form">Case Number: </span>
-                            <span class="value-span-form" id="ref-id-span"><b>REF000056</b></span>
+                            <span class="value-span-form" id="ref-id-span"><b>-</b></span>
                         </div>
                         <div class="right-row-div-b">
                             <span class="title-span-form">Select Response Status: </span>

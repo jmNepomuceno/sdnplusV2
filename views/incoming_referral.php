@@ -56,30 +56,38 @@
                 <h3>Filter Referrals</h3>
                 <form class="filter-form" id="referral-search-form">
                     <div class="form-row">
-                        <input type="text" class="form-control" id="referral_no" name="referral_no" placeholder="Referral No.">
-                        <input type="text" class="form-control" id="last_name" name="last_name" placeholder="Last Name">
-                        <input type="text" class="form-control" id="first_name" name="first_name" placeholder="First Name">
-                        <input type="text" class="form-control" id="middle_name" name="middle_name" placeholder="Middle Name">
+                        <input type="text" class="form-control" id="referral_no" name="referral_no" placeholder="Referral No." autocomplete="off">
+                        <input type="text" class="form-control" id="last_name" name="last_name" placeholder="Last Name" autocomplete="off">
+                        <input type="text" class="form-control" id="first_name" name="first_name" placeholder="First Name" autocomplete="off">
+                        <input type="text" class="form-control" id="middle_name" name="middle_name" placeholder="Middle Name" autocomplete="off">
                     </div>
                     
                     <div class="form-row">
+                        <!-- Case Type populated dynamically -->
                         <select class="form-control" id="case_type" name="case_type">
-                            <option value="">Case Type</option>
-                            <option value="emergency">Emergency</option>
-                            <option value="non-emergency">Non-Emergency</option>
+                            <option value="">Select Case Type</option>
                         </select>
-                        <input type="text" class="form-control" id="agency" name="agency" placeholder="Agency">
-                        <input type="date" class="form-control" id="start_date" name="start_date">
-                        <input type="date" class="form-control" id="end_date" name="end_date">
+
+                        <!-- Agency populated dynamically -->
+                        <select class="form-control" id="agency" name="agency">
+                            <option value="">Select Agency</option>
+                        </select>
+
+                        <!-- Start/End Date -->
+                        <input type="text" class="form-control" id="start_date" name="start_date" placeholder="Start Date" onfocus="(this.type='date')" autocomplete="off">
+                        <input type="text" class="form-control" id="end_date" name="end_date" placeholder="End Date" onfocus="(this.type='date')" autocomplete="off">
+
                     </div>
 
                     <div class="form-row">
-                        <input type="text" class="form-control" id="tat_filter" name="tat_filter" placeholder="Turnaround Time Filter">
+                        <input type="text" class="form-control" id="tat_filter" name="tat_filter" placeholder="Turnaround Time Filter" autocomplete="off">
+                        
                         <select class="form-control" id="sensitive_case" name="sensitive_case">
                             <option value="">Sensitive Case</option>
                             <option value="yes">Yes</option>
                             <option value="no">No</option>
                         </select>
+
                         <select class="form-control" id="status" name="status">
                             <option value="">Status</option>
                             <option value="pending">Pending</option>
@@ -94,6 +102,8 @@
                         <button type="reset" class="btn btn-secondary">Clear</button>
                     </div>
                 </form>
+
+
 
             </div>
 
