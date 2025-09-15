@@ -43,6 +43,7 @@
             r.reception_time,
             r.approved_time,
             r.deferred_time,
+            r.sensitive_case,
             r.final_progressed_timer,
 
             sh.hospital_director,

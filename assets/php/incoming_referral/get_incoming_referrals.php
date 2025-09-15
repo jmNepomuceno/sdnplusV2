@@ -27,6 +27,7 @@
                 r.date_time,
                 r.status,
                 r.reception_time,
+                r.sensitive_case,
 
             sh.hospital_director,
             sh.hospital_director_mobile,

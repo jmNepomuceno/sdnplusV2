@@ -12,11 +12,8 @@ var fetch_incomingReferrals = (url = '../../assets/php/incoming_referral/get_inc
                 data: data,
                 dataType: "json",
                 success: function (response) {
-                    console.log(activeTimers)
                     let referrals = response.data || [];
                     let dataSet = [];
-
-                    console.log("Fetched referrals:", referrals);
 
                     for (let i = 0; i < referrals.length; i++) {
                         let item = referrals[i];
@@ -32,47 +29,77 @@ var fetch_incomingReferrals = (url = '../../assets/php/incoming_referral/get_inc
                             interval = ` <span class="interval-span">(${mins}:${secs})</span>`;
                         }
 
-                        let actionButtons = "";
+                        let isSensitive = item.sensitive_case && item.sensitive_case.toLowerCase() === "yes";
 
+                        // ---------------- ACTION BUTTONS ----------------
+                        let actionButtons = "";
                         if (item.status.toLowerCase() === "pending" || item.status.toLowerCase() === "on-process") {
                             actionButtons = `
-                                <button class="btn btn-sm btn-outline-primary start-process" data-referral_id="${item.referral_id}">
+                                <button class="btn btn-sm btn-outline-primary start-process" 
+                                    data-referral_id="${item.referral_id}" 
+                                    ${isSensitive ? "disabled" : ""}>
                                     <i class="fa fa-pencil"></i> Process
                                 </button>
-                                <button class="btn btn-sm btn-outline-info view-details" data-referral_id="${item.referral_id}">
+                                <button class="btn btn-sm btn-outline-info view-details" 
+                                    data-referral_id="${item.referral_id}">
                                     <i class="fa fa-eye"></i> More Details
                                 </button>
+                                ${isSensitive
+                                    ? `<button class="btn btn-sm btn-warning unlock-sensitive mt-1"
+                                            data-referral_id="${item.referral_id}"
+                                            data-name="${item.patient_name}"
+                                            data-address="${item.full_address || 'N/A'}"
+                                            data-age="${item.age || 'N/A'}">
+                                            🔒 Unlock Info
+                                       </button>`
+                                    : ""
+                                }
                             `;
                         } else {
-                            // hide Process if already approved/deferred
                             actionButtons = `
-                                <button class="btn btn-sm btn-outline-success view-referral" data-referral_id="${item.referral_id}">
+                                <button class="btn btn-sm btn-outline-success view-referral" 
+                                    data-referral_id="${item.referral_id}">
                                     <i class="fa fa-file-alt"></i> View Referral
                                 </button>
-                                <button class="btn btn-sm btn-outline-info view-details" data-referral_id="${item.referral_id}">
+                                <button class="btn btn-sm btn-outline-info view-details" 
+                                    data-referral_id="${item.referral_id}">
                                     <i class="fa fa-eye"></i> More Details
                                 </button>
                             `;
                         }
 
+                        // ---------------- PATIENT INFO ----------------
+                        let patientInfo = "";
+                        if (isSensitive) {
+                            patientInfo = `
+                                <div class="patient-info-div">
+                                    <div class="fw-bold patient-name">[Confidential – Locked]</div>
+                                    <div class="small text-muted patient-extra">
+                                        Address: [Hidden]<br>Age: [Hidden]
+                                    </div>
+                                </div>
+                            `;
+                        } else {
+                            patientInfo = `
+                                <div class="patient-info-div">
+                                    <div class="fw-bold patient-name">${item.patient_name}</div>
+                                    <div class="small text-muted patient-extra">
+                                        Address: ${item.full_address || 'N/A'}<br>
+                                        Age: ${item.age || 'N/A'}
+                                    </div>
+                                </div>
+                            `;
+                        }
+
+                        // ---------------- DATATABLE ROW ----------------
                         dataSet.push([
                             `<span class="ref-no-span">${item.reference_num}</span>`,
-
-                            `<div class="patient-info-div">
-                                <div class="fw-bold">${item.patient_name}</div>
-                                <div class="small text-muted">
-                                    Address: ${item.full_address || 'N/A'}<br>
-                                    Age: ${item.age || 'N/A'}
-                                </div>
-                            </div>`,
-
+                            patientInfo,
                             `<div class="type-info-div">${item.type}</div>`,
-
                             `<div class="agency-info-div">
                                 <span class="small"><b>Referred by:</b> ${item.referred_by || 'N/A'}</span><br>
                                 <span class="small"><b>Landline:</b> ${item.landline_no || 'N/A'}</span><br>
                                 <span class="small"><b>Mobile:</b> ${item.mobile_no || 'N/A'}</span>
-
                                 <div class="contact-extra">
                                     <hr>
                                     <span class="small"><b>Director:</b> ${item.hospital_director || 'N/A'}  </span><br>
@@ -81,12 +108,10 @@ var fetch_incomingReferrals = (url = '../../assets/php/incoming_referral/get_inc
                                     <span class="small"><b>Point Person No.:</b> ${item.hospital_point_person_mobile || 'N/A'} </span>
                                 </div>
                             </div>`,
-
                             `<div class="datetime-info-div small">
                                 <span><b>Referred:</b> ${item.date_time || '-'}</span><br>
                                 <span><b>Reception:</b> ${item.reception_time || '-'}${interval}</span><br>
                                 <span class="text-success"><b>Processed:</b> ${item.final_progressed_timer || '-'}</span>
-
                                 <div class="contact-extra">
                                     <hr>
                                     <span><b>Approval:</b> ${item.approved_time || '-'}</span><br>
@@ -94,7 +119,6 @@ var fetch_incomingReferrals = (url = '../../assets/php/incoming_referral/get_inc
                                     <span><b>Cancelled:</b> ${item.deferred_time || '-'}</span><br>
                                 </div>
                             </div>`,
-
                             `<span class="response-time badge bg-warning text-dark" 
                                 id="response-time-${item.referral_id}" 
                                 data-reception_time="${item.reception_time || ''}" 
@@ -102,17 +126,12 @@ var fetch_incomingReferrals = (url = '../../assets/php/incoming_referral/get_inc
                                 data-deferred_time="${item.deferred_time || ''}">
                                 Processing: 00:00:00
                             </span>`,
-
                             `<span class="status-badge badge bg-secondary">${item.status}</span>`,
-
-                            `
-                                <div class="action-buttons">
-                                    ${actionButtons}
-                                </div>
-                            `
+                            `<div class="action-buttons">${actionButtons}</div>`
                         ]);
                     }
 
+                    // ---------------- INIT DATATABLE ----------------
                     if ($.fn.DataTable.isDataTable('#incomingReferralsTable')) {
                         $('#incomingReferralsTable').DataTable().destroy();
                         $('#incomingReferralsTable tbody').empty();
@@ -136,7 +155,7 @@ var fetch_incomingReferrals = (url = '../../assets/php/incoming_referral/get_inc
                             { targets: 1, createdCell: function(td) { $(td).addClass('patient-td'); } },
                             { 
                                 targets: 2, 
-                                createdCell: function(td, cellData, rowData, row, col) {
+                                createdCell: function(td, cellData) {
                                     $(td).addClass('type-td');
                                     let typeText = $(td).text().trim();
                                     let bgColor = classificationColors[typeText] || "#ccc";
@@ -156,7 +175,6 @@ var fetch_incomingReferrals = (url = '../../assets/php/incoming_referral/get_inc
                         ],
                         pageLength: 10,
                         responsive: true,
-                        // paging: false,
                         info: false,
                         ordering: false,
                         stripeClasses: [],
@@ -164,7 +182,7 @@ var fetch_incomingReferrals = (url = '../../assets/php/incoming_referral/get_inc
                         autoWidth: false,
                     });
 
-                    // Re-init timers
+                    // ---------------- RE-INIT TIMERS ----------------
                     $(".response-time").each(function () {
                         let $this = $(this);
                         let referralId = $this.attr("id").replace("response-time-", "");
@@ -189,6 +207,7 @@ var fetch_incomingReferrals = (url = '../../assets/php/incoming_referral/get_inc
         }
     });
 };
+
 
 var startTimer = (referralId, reception_time) =>{
     // ⛔ If already running, do nothing
@@ -432,6 +451,39 @@ $(document).ready(function() {
                 Swal.fire("Error", "Server error completing process", "error");
             }
         });
+    });
+
+    $(document).on("click", ".unlock-sensitive", function() {
+        let referralId = $(this).data("referral_id");
+        let realName = $(this).data("name");
+        let realAddress = $(this).data("address");
+        let realAge = $(this).data("age");
+
+        let row = $(this).closest("tr");
+
+        // Prompt the doctor for password
+        let password = prompt("Enter password to unlock sensitive details:");
+
+        if (password === null) {
+            // User clicked cancel
+            return;
+        }
+
+        console.log(password)
+
+        // Example hardcoded password check (replace with AJAX validation)
+        if (password === "123") {
+            row.find(".patient-name").text(realName);
+            row.find(".patient-extra").html(`Address: ${realAddress}<br>Age: ${realAge}`);
+
+            // Enable process button
+            row.find(".start-process").prop("disabled", false);
+
+            // Remove unlock button
+            row.find(".unlock-sensitive").remove();
+        } else {
+            alert("Incorrect password! Access denied.");
+        }
     });
 
 

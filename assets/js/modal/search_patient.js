@@ -34,10 +34,31 @@ $(document).ready(function () {
     $("#search-patient-form").on("submit", function (e) {
         e.preventDefault();
 
-        // Get input values
         let lastName = $("#last-name-search").val().trim();
         let firstName = $("#first-name-search").val().trim();
         let middleName = $("#middle-name-search").val().trim();
+
+        // ✅ Require at least one field
+        if (!lastName && !firstName && !middleName) {
+            $("#search-results").html(`
+                <div class="alert alert-warning">
+                    Please enter at least one field to search.
+                </div>
+            `);
+            return;
+        }
+
+        // ✅ Each field must be 2+ characters if not empty
+        if ((lastName && lastName.length < 2) ||
+            (firstName && firstName.length < 2) ||
+            (middleName && middleName.length < 2)) {
+            $("#search-results").html(`
+                <div class="alert alert-warning">
+                    Each search field must contain at least 2 letters.
+                </div>
+            `);
+            return;
+        }
 
         // Clear old results + loading
         $("#search-results").empty().append(`
@@ -48,7 +69,9 @@ $(document).ready(function () {
             </div>
         `);
 
-        // AJAX request to backend
+        // ✅ Also clear old pagination before appending new one
+        $("#pagination-container").remove(); 
+
         $.ajax({
             url: "../../assets/php/patient_registration_form/get_search_patient.php",
             type: "POST",
@@ -59,7 +82,6 @@ $(document).ready(function () {
                 middleName: middleName
             },
             success: function (response) {
-                console.log(response)
                 $("#search-results").empty();
 
                 if (response.length === 0) {
@@ -69,10 +91,9 @@ $(document).ready(function () {
                     return;
                 }
 
-                // Render paginated results
                 renderResults(response, 1);
 
-                // Render pagination controls
+                // ✅ Make sure pagination is created once
                 renderPagination(response);
             },
             error: function (xhr, status, error) {
@@ -84,8 +105,9 @@ $(document).ready(function () {
                 `);
             }
         });
-
     });
+
+
 
     // Function: render results with pagination
     function renderResults(data, page) {
@@ -97,9 +119,18 @@ $(document).ready(function () {
 
         pageData.forEach(p => {
             let statusText = p.status ? p.status : "Registered";
-            let badgeClass = (p.status && p.status.includes("Approved")) 
-                ? "bg-success" 
-                : "bg-warning";
+
+            // 🔹 Map status to Bootstrap badge colors
+            let statusColors = {
+                "Registered": "bg-primary",
+                "Pending": "bg-warning text-dark",
+                "Approved": "bg-success",
+                "Deferred": "bg-info text-dark",
+                "Cancelled": "bg-danger"
+            };
+
+            // Pick the color class or fallback
+            let badgeClass = statusColors[statusText] || "bg-secondary";
 
             let card = `
                 <div class="card shadow-sm mb-2">
@@ -128,6 +159,7 @@ $(document).ready(function () {
             $("#search-results").append(card);
         });
 
+
         // Apply scroll if more than 10 results
         if (data.length > RESULTS_PER_PAGE) {
             $("#search-results").css({
@@ -145,10 +177,14 @@ $(document).ready(function () {
 
     // Function: render pagination controls
     function renderPagination(data) {
+        $("#pagination-container").remove();  // remove old pagination
+
         let totalPages = Math.ceil(data.length / RESULTS_PER_PAGE);
         if (totalPages <= 1) return; // No pagination needed
 
-        let pagination = `<nav><ul class="pagination justify-content-center mt-3">`;
+        let pagination = `<div id="pagination-container">
+            <nav>
+                <ul class="pagination justify-content-center mt-3">`;
 
         for (let i = 1; i <= totalPages; i++) {
             pagination += `
@@ -158,7 +194,7 @@ $(document).ready(function () {
             `;
         }
 
-        pagination += `</ul></nav>`;
+        pagination += `</ul></nav></div>`;
 
         $("#search-results").after(pagination);
 
@@ -175,6 +211,8 @@ $(document).ready(function () {
         // Mark first page active
         $(".pagination .page-item:first").addClass("active");
     }
+
+
 
     // Handle dynamic "View Details" button
     $(document).on("click", ".view-details-btn", function () {

@@ -83,12 +83,14 @@ body {
     margin:0;
 }
 
-.right-container .form-container fieldset input, .right-container .form-container fieldset select {
+.right-container .form-container fieldset input,
+.right-container .form-container fieldset select {
     padding: 2px;
     border: 1px solid #ccc;
     border-radius: 4px;
-    font-size: 1rem;
-    /* border:1px solid red; */
+    font-size: 0.85rem;
+    width: 100%;         /* 👈 force select/input to fit its container */
+    box-sizing: border-box; /* 👈 prevents overflow from padding */
 }
 
 /* Button */

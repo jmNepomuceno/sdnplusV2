@@ -1,7 +1,6 @@
 <?php 
     session_start();
-
-    
+    date_default_timezone_set('Asia/Manila');
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -87,7 +86,7 @@
                     </div>
                     <div class="form-group">
                         <label>Age</label>
-                        <input id="age-txt" type="number" name="age" autocomplete="off">
+                        <input id="age-txt" type="number" name="age" autocomplete="off" style="pointer-events: none;">
                     </div>
                     <div class="form-group">
                         <label>Gender</label>
@@ -127,7 +126,7 @@
 
                     <div class="form-group">
                         <label>Hospital No.</label>
-                        <input id="hospital-no-txt" type="text" name="hospital_no" autocomplete="off" value="1111">
+                        <input id="hospital-no-txt" type="text" name="hospital_no" autocomplete="off" value="1111" style="pointer-events:none;" readonly>
                     </div>
                     <div class="form-group">
                         <label>PHIC</label>

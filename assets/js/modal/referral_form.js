@@ -148,7 +148,9 @@ $(document).ready(function() {
                         timer: 2000,
                         showConfirmButton: false
                     });
-                    
+
+                    referral_form_modal.hide()
+                    clear_inputFields()
                 } else {
                     Swal.fire({
                         icon: "warning",

@@ -1,3 +1,23 @@
+var clear_inputFields = () =>{
+    // Clear all input fields
+    $('input[type="text"], input[type="email"], input[type="number"], input[type="date"], select').val('');
+    $('#age-txt').val(''); // specifically for age since it's readonly
+
+    // Reset borders
+    $('input, select').css('border', '');
+
+    // Uncheck the "Same as Permanent Address" checkbox if checked
+    $('#same-permanent-btn').prop('checked', false);
+
+    // Enable current address fields if they were disabled
+    $("#region-select-ca, #province-select-ca, #city-select-ca, #barangay-select-ca, #address-ca, #house-no-txt-ca, #street-txt-ca, #phone-no-txt-ca, #mobile-no-txt-ca, #email-txt-ca")
+        .prop("disabled", false);
+
+    $('#classification-select').val("")
+    $("#classification-select").addClass('d-none')
+    $("#add-patient-btn").text("Add");
+}
+
 $(document).ready(function () {
     let search_patient = new bootstrap.Modal(document.getElementById('search-patient-modal'));
     let referral_form_modal = new bootstrap.Modal(document.getElementById('referral-form-modal'));
@@ -296,19 +316,7 @@ $(document).ready(function () {
     });
 
     $('#clear-patient-btn').click(function() {
-        // Clear all input fields
-        $('input[type="text"], input[type="email"], input[type="number"], input[type="date"], select').val('');
-        $('#age-txt').val(''); // specifically for age since it's readonly
-
-        // Reset borders
-        $('input, select').css('border', '');
-
-        // Uncheck the "Same as Permanent Address" checkbox if checked
-        $('#same-permanent-btn').prop('checked', false);
-
-        // Enable current address fields if they were disabled
-        $("#region-select-ca, #province-select-ca, #city-select-ca, #barangay-select-ca, #address-ca, #house-no-txt-ca, #street-txt-ca, #phone-no-txt-ca, #mobile-no-txt-ca, #email-txt-ca")
-            .prop("disabled", false);
+        clear_inputFields()
     });
 
     $('#search-patient-btn').on('click', function () {

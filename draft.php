@@ -13,3 +13,10 @@
 
     phpinfo();
 ?>
+
+
+<!-- 
+todo: 
+1. width of the text box adjusting based on the provinces/city
+2. color of patient status on the search patient
+-->
