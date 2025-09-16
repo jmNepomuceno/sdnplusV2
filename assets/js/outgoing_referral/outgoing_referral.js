@@ -152,9 +152,6 @@ var fetch_outgoingReferrals = (url = '../../assets/php/outgoing_referral/get_out
         }
     });
 };
-
-
-
  // ♻️ Reusable function to fetch details
 var fetchReferralDetails = (referralId) => {
     $.ajax({
@@ -219,6 +216,10 @@ var fetchReferralDetails = (referralId) => {
         }
     });
 }
+
+
+
+
 $(document).ready(function() {    
     let patient_referral_modal = new bootstrap.Modal(document.getElementById('patient-referral-modal'));
 
@@ -227,9 +228,8 @@ $(document).ready(function() {
         console.log("Received from WebSocket:", data); // Debugging
 
         // Call fetchNotifValue() on every process update
-        switch (data.action) {
-            case "sentIncomingReferral":
-                console.log(468)
+        switch (data.action.trim()) {
+            case "startProcess":
                 fetch_outgoingReferrals();
                 break;
             default:

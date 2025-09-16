@@ -309,7 +309,6 @@ var fetchReferralDetails = (referralId) => {
     });
 }
 $(document).ready(function() {    
-    var yawa = "asdf";
     let patient_referral_modal = new bootstrap.Modal(document.getElementById('patient-referral-modal'));
     // patient_referral_modal.show();
     // Load data via AJAX
@@ -325,7 +324,6 @@ $(document).ready(function() {
         // Call fetchNotifValue() on every process update
         switch (data.action) {
             case "sentIncomingReferral":
-                console.log(468)
                 fetch_incomingReferrals();
                 break;
             default:

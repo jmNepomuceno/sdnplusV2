@@ -5,6 +5,8 @@
     date_default_timezone_set('Asia/Manila');
     session_start();
 
+    require "../../../vendor/autoload.php";  // Ensure Composer's autoload is included
+    use WebSocket\Client;
     try {
         $referral_id = $_POST['referral_id'] ?? null;
         if (!$referral_id) {
@@ -22,7 +24,15 @@
             "success" => true,
             "reception_time" => date("Y-m-d H:i:s")
         ]);
+
     } catch (Exception $e) {
         echo json_encode(["success" => false, "message" => $e->getMessage()]);
+    }
+
+    try {
+        $client = new Client("ws://10.10.90.14:8081/chat");
+        $client->send(json_encode(["action" => "startProcess"]));
+    } catch (Exception $e) {
+        echo "WebSocket error: " . $e->getMessage();
     }
 ?>
