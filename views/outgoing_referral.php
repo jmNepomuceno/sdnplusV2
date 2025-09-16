@@ -21,6 +21,8 @@
     // $sql = "DELETE FROM incoming_referrals WHERE hpercode='PAT002932'";
     // $stmt = $pdo->prepare($sql);
     // $stmt->execute();
+
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -31,7 +33,7 @@
     <?php include("../links/header_link.php") ?>
 
     <link rel="stylesheet" href="../assets/css/sidebar.css">
-    <link rel="stylesheet" href="../assets/css/incoming_referral.css">
+    <link rel="stylesheet" href="../assets/css/outgoing_referral.css">
     <link rel="stylesheet" href="../assets/css/navbar.css">
     <link rel="stylesheet" href="../assets/css/modal/referral_information_form.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -108,7 +110,7 @@
             <!-- 🔹 DataTable Section -->
             <div class="table-section card">
                 <div class="table-responsive">
-                    <table id="incomingReferralsTable" class="table table-striped table-bordered referral-table">
+                    <table id="outgoingReferralsTable" class="table table-striped table-bordered referral-table">
                         <thead>
                             <tr>
                                 <th>Reference No.</th>
@@ -116,7 +118,6 @@
                                 <th>Type</th>
                                 <th>Agency</th>
                                 <th>Date/Time</th>
-                                <th>Response Time</th>
                                 <th>Status</th>
                                 <th>Action</th>
                             </tr>
@@ -136,7 +137,7 @@
 
 
     <script src="../assets/js/sidebar_traverse.js"></script>
-    <script src="../assets/js/incoming_referral/incoming_referral.js?v=<?php echo time(); ?>"></script>
+    <script src="../assets/js/outgoing_referral/outgoing_referral.js?v=<?php echo time(); ?>"></script>
     <script src="../assets/js/modal/referral_information_form.js?v=<?php echo time(); ?>"></script>
     <script src="../assets/js/modal/referral_search.js?v=<?php echo time(); ?>"></script>
 </body>

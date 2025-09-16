@@ -29,7 +29,7 @@ var fetch_incomingReferrals = (url = '../../assets/php/incoming_referral/get_inc
                             interval = ` <span class="interval-span">(${mins}:${secs})</span>`;
                         }
 
-                        let isSensitive = item.sensitive_case && item.sensitive_case.toLowerCase() === "yes";
+                        let isSensitive = item.sensitive_case && item.sensitive_case.toLowerCase() === "true";
 
                         // ---------------- ACTION BUTTONS ----------------
                         let actionButtons = "";

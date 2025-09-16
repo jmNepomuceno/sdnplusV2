@@ -38,7 +38,12 @@ $(document).ready(function() {
             status: $("#status").val()
         };
 
-        console.table(formData)
-        fetch_incomingReferrals("../../assets/php/incoming_referral/search_referrals.php", formData);
+        if ($("#incomingReferralsTable").length) {
+            fetch_incomingReferrals("../../assets/php/incoming_referral/search_incoming_referrals.php", formData);
+        } else if ($("#outgoingReferralsTable").length) {
+            fetch_outgoingReferrals("../../assets/php/outgoing_referral/search_outgoing_referrals.php", formData);
+        }
+
+
     });
 })

@@ -1,0 +1,258 @@
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    display: flex;
+    height: 100vh;
+}
+
+.left-container {
+    width: 250px;
+    background: #f8f8f8;
+    padding: 20px;
+    flex-shrink: 0;
+}
+
+.right-container {
+    flex: 1;
+    overflow-y: auto;
+    background: #fafafa;
+
+    display:flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+
+    margin:0;
+}
+
+.incoming-referral-container {
+    padding: 20px;
+    width: 95%;
+}
+
+.card {
+    background: #fff;
+    border-radius: 8px;
+    padding: 15px 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+.card h3 {
+    font-size: 1.2rem;
+    margin-bottom: 15px;
+    font-weight: 600;
+    color: #333;
+}
+
+.filter-form .form-row {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.filter-form .form-control {
+    flex: 1;
+}
+
+.form-actions {
+    justify-content: flex-end;
+}
+
+.table-section table {
+    font-size: 0.9rem;
+    text-align: left;
+}
+
+.table-section th {
+    background: #f8f9fa;
+    font-weight: 600;
+    text-align: center;
+}
+
+/* === General Table Styling === */
+.referral-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9rem;
+    color: #333;
+}
+
+.referral-table thead th {
+    background: #f1f3f5;
+    color: #444;
+    font-weight: 600;
+    text-align: center;
+    padding: 12px;
+    border-bottom: 2px solid #dee2e6;
+}
+
+.referral-table tbody td {
+    vertical-align: top;
+    padding: 12px;
+    border-bottom: 1px solid #eee;
+    height: 100%;
+}
+
+.referral-table tbody .type-td{
+    height: 100%;
+}
+
+/* Alternate row hover */
+.referral-table tbody tr:hover {
+    background: #f9fbfd;
+    transition: background 0.2s ease-in-out;
+}
+
+/* === Patient Column === */
+.referral-table td .patient-name {
+    font-weight: 600;
+    font-size: 0.95rem;
+    text-transform: uppercase;
+    color: #2a3d66;
+}
+
+.referral-table td .patient-info {
+    font-size: 0.8rem;
+    color: #555;
+    line-height: 1.4;
+}
+
+/* === Type / Classification Column === */
+.referral-type {
+    display: inline-block;
+    padding: 6px 10px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    border-radius: 6px;
+    text-align: center;
+    min-width: 90px;
+    color: #fff;
+}
+
+.referral-type.er {
+    background: #e76f51; /* Orange-Red */
+}
+
+.referral-type.toxicology {
+    background: #b5179e; /* Magenta */
+}
+
+.referral-type.default {
+    background: #457b9d; /* Blue */
+}
+
+/* === Agency Column === */
+.agency-info {
+    font-size: 0.8rem;
+    line-height: 1.4;
+}
+.agency-info strong {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 4px;
+    color: #2a3d66;
+}
+
+/* === Date/Time Column === */
+.datetime-info {
+    font-size: 0.8rem;
+    line-height: 1.4;
+}
+.datetime-info span {
+    display: block;
+    margin-bottom: 2px;
+}
+.datetime-info .highlight {
+    color: #2b9348;
+    font-weight: 600;
+}
+
+/* === Response Time === */
+.response-time {
+    font-weight: 600;
+    font-size: 0.85rem;
+}
+.response-time.processing {
+    color: #e9c46a;
+}
+.response-time.finished {
+    color: #2b9348;
+}
+.response-time.delayed {
+    color: #d62828;
+}
+
+.contact-extra {
+    display: none;
+    margin-top: 5px;
+}
+
+/* === Status Badges === */
+.status-badge {
+    display: inline-block;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: #fff;
+}
+
+.status-approved {
+    background: #2a9d8f;
+}
+.status-deferred {
+    background: #e76f51;
+}
+.status-pending {
+    background: #f4a261;
+}
+.status-cancelled {
+    background: #6c757d;
+}
+
+/* === Action Buttons === */
+.action-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    align-items: center;
+}
+
+.action-buttons .btn {
+    font-size: 0.75rem;
+    padding: 4px 8px;
+    border-radius: 6px;
+    min-width: 90px;
+}
+
+/* Pencil Button */
+.btn-process {
+    background: #264653;
+    color: #fff;
+    border: none;
+}
+.btn-process:hover {
+    background: #1d3557;
+}
+
+.interval-span {
+    color: orange;
+    font-size: 0.75em;  /* smaller than normal text */
+    font-weight: bold;
+    margin-left: 4px;   /* little spacing from reception time */
+}
+
+/* Custom XXL Modal */
+.modal-xxl {
+  max-width: 75% !important; 
+  width: 75%;
+}
+
+@media (min-width: 1200px) {
+  .modal-xxl {
+    max-width: 70% !important;
+  }
+}
+
+

@@ -26,11 +26,11 @@
                             </label>
                             <div class="d-flex gap-3 mt-1">
                                 <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" name="sensitive_case" id="sensitiveYes" value="Yes" required>
+                                    <input class="form-check-input" type="radio" name="sensitive_case" id="sensitiveYes" value="true" required>
                                     <label class="form-check-label" for="sensitiveYes">Yes</label>
                                 </div>
                                 <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" name="sensitive_case" id="sensitiveNo" value="No" required>
+                                    <input class="form-check-input" type="radio" name="sensitive_case" id="sensitiveNo" value="false" required>
                                     <label class="form-check-label" for="sensitiveNo">No</label>
                                 </div>
                             </div>
