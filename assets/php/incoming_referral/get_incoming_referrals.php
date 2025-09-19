@@ -28,6 +28,7 @@
                 r.status,
                 r.reception_time,
                 r.sensitive_case,
+                r.hpercode,
 
             sh.hospital_director,
             sh.hospital_director_mobile,
@@ -46,15 +47,29 @@
             LEFT JOIN bghmc.sdn_hospital sh 
                 ON r.referred_by = sh.hospital_name
 
-            WHERE r.status IN ('Pending', 'On-Process')
+            WHERE r.status IN ('Pending', 'On-Process') AND r.refer_to = ?
             ORDER BY r.date_time DESC
         ";
 
         $stmt = $pdo->prepare($sql);
-        $stmt->execute();
+        $stmt->execute([$_SESSION['user']['hospital_name']]);
         $referrals = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-        echo json_encode(["data" => $referrals], JSON_PRETTY_PRINT);
+        // ✅ Add numbering to reference_num
+        $refCounts = [];
+        foreach ($referrals as &$row) {
+            $refKey = $row['reference_num'];
+
+            if (!isset($refCounts[$refKey])) {
+                $refCounts[$refKey] = 1;
+            } else {
+                $refCounts[$refKey]++;
+            }
+
+            $row['reference_num'] = $refKey . ' - ' . $refCounts[$refKey];
+        }
+
+        echo json_encode(["data" => $referrals]);
         // echo "here";
 
     } catch (PDOException $e) {

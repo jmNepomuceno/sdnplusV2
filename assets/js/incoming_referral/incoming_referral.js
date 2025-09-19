@@ -14,6 +14,7 @@ var fetch_incomingReferrals = (url = '../../assets/php/incoming_referral/get_inc
                 success: function (response) {
                     let referrals = response.data || [];
                     let dataSet = [];
+                    console.log(referrals)
 
                     for (let i = 0; i < referrals.length; i++) {
                         let item = referrals[i];
@@ -37,6 +38,8 @@ var fetch_incomingReferrals = (url = '../../assets/php/incoming_referral/get_inc
                             actionButtons = `
                                 <button class="btn btn-sm btn-outline-primary start-process" 
                                     data-referral_id="${item.referral_id}" 
+                                    data-referral_type="${item.type}" 
+                                    data-referral_hpercode="${item.hpercode}" 
                                     ${isSensitive ? "disabled" : ""}>
                                     <i class="fa fa-pencil"></i> Process
                                 </button>
@@ -51,20 +54,31 @@ var fetch_incomingReferrals = (url = '../../assets/php/incoming_referral/get_inc
                                             data-address="${item.full_address || 'N/A'}"
                                             data-age="${item.age || 'N/A'}">
                                             🔒 Unlock Info
-                                       </button>`
+                                    </button>`
                                     : ""
                                 }
                             `;
                         } else {
                             actionButtons = `
                                 <button class="btn btn-sm btn-outline-success view-referral" 
-                                    data-referral_id="${item.referral_id}">
+                                    data-referral_id="${item.referral_id}" 
+                                    ${isSensitive ? "disabled" : ""}>
                                     <i class="fa fa-file-alt"></i> View Referral
                                 </button>
                                 <button class="btn btn-sm btn-outline-info view-details" 
                                     data-referral_id="${item.referral_id}">
                                     <i class="fa fa-eye"></i> More Details
                                 </button>
+                                ${isSensitive
+                                    ? `<button class="btn btn-sm btn-warning unlock-sensitive mt-1"
+                                            data-referral_id="${item.referral_id}"
+                                            data-name="${item.patient_name}"
+                                            data-address="${item.full_address || 'N/A'}"
+                                            data-age="${item.age || 'N/A'}">
+                                            🔒 Unlock Info
+                                    </button>`
+                                    : ""
+                                }
                             `;
                         }
 
@@ -91,6 +105,15 @@ var fetch_incomingReferrals = (url = '../../assets/php/incoming_referral/get_inc
                             `;
                         }
 
+                        // ---------------- PROCESSED TIMER COLOR ----------------
+                        let processedTimer = item.final_progressed_timer || "-";
+                        let processedClass = "text-success"; // default green
+                        let processColor = "black"
+                        if (item.final_progressed_timer && item.final_progressed_timer >= "00:15:00") {
+                            processedClass = "text-danger"; // red if >= 15 mins
+                            processColor = "red !important"
+                        }
+
                         // ---------------- DATATABLE ROW ----------------
                         dataSet.push([
                             `<span class="ref-no-span">${item.reference_num}</span>`,
@@ -111,7 +134,7 @@ var fetch_incomingReferrals = (url = '../../assets/php/incoming_referral/get_inc
                             `<div class="datetime-info-div small">
                                 <span><b>Referred:</b> ${item.date_time || '-'}</span><br>
                                 <span><b>Reception:</b> ${item.reception_time || '-'}${interval}</span><br>
-                                <span class="text-success"><b>Processed:</b> ${item.final_progressed_timer || '-'}</span>
+                                <span class="${processedClass}"><b>Processed:</b> ${processedTimer}</span>
                                 <div class="contact-extra">
                                     <hr>
                                     <span><b>Approval:</b> ${item.approved_time || '-'}</span><br>
@@ -119,17 +142,18 @@ var fetch_incomingReferrals = (url = '../../assets/php/incoming_referral/get_inc
                                     <span><b>Cancelled:</b> ${item.deferred_time || '-'}</span><br>
                                 </div>
                             </div>`,
-                            `<span class="response-time badge bg-warning text-dark" 
+                            `<span class="response-time badge bg-warning text-dark" style="color:${processColor};" 
                                 id="response-time-${item.referral_id}" 
                                 data-reception_time="${item.reception_time || ''}" 
                                 data-approval_time="${item.approved_time || ''}" 
                                 data-deferred_time="${item.deferred_time || ''}">
-                                Processing: 00:00:00
+                                Processing:${item.final_progressed_timer || '00:00:00'}
                             </span>`,
                             `<span class="status-badge badge bg-secondary">${item.status}</span>`,
                             `<div class="action-buttons">${actionButtons}</div>`
                         ]);
                     }
+
 
                     // ---------------- INIT DATATABLE ----------------
                     if ($.fn.DataTable.isDataTable('#incomingReferralsTable')) {
@@ -208,7 +232,6 @@ var fetch_incomingReferrals = (url = '../../assets/php/incoming_referral/get_inc
     });
 };
 
-
 var startTimer = (referralId, reception_time) =>{
     // ⛔ If already running, do nothing
     if (activeTimers[referralId]) return;
@@ -273,9 +296,12 @@ var fetchReferralDetails = (referralId) => {
                 $("#pat-mobile-no-span").text(p.pat_mobile_no);
 
                 $('#select-response-status').prepend(`<option value="${r.status}" selected hidden>${r.status}</option>`);
-                $('#select-response-status').css('pointer-events' , 'none') //a5d6a7
-                $('#select-response-status').css('background' , '#a5d6a7') //a5d6a7
-                $('#select-response-status').css('font-weight' , 'bold') //a5d6a7
+
+                if(r.status != "On-Process"){
+                    $('#select-response-status').css('pointer-events' , 'none') //a5d6a7
+                    $('#select-response-status').css('background' , '#a5d6a7') //a5d6a7
+                    $('#select-response-status').css('font-weight' , 'bold') //a5d6a7
+                }
 
                 $('#referred-by-span').text(r.referring_doctor)
                 $('#referred-agency-span').text(r.referred_by)
@@ -299,6 +325,37 @@ var fetchReferralDetails = (referralId) => {
                 $("#assessment-span").val(r.diagnosis);
                 $("#plan-span").val(r.plan);
                 $("#patlast-span").val(r.remarks);
+
+                $(".approval-form-div").css('display' , 'none')
+                $(".card-footer").css('display' , 'block')
+                // $('.preemptive-text').show();
+
+                if(r.status === 'Approved'){
+                    $(".approval-form-div").css('display' , 'block')
+                    $('#approval-deferral-form-title').text("Approval Form");
+                    $('#approve-deferred-submit-btn').text("Approve Referral");
+
+                    $('#category-approval-select').css("pointer-events" , "none");
+                    $('#er-action').css("pointer-events" , "none");
+                    $(".card-footer").css('display' , 'none')
+                    $('.preemptive-text').hide();
+
+                    $('#category-approval-select').prepend(`<option value="${r.status}" selected hidden>${r.status}</option>`);
+                    $('#er-action').val(r.approval_details)
+                }
+                else if(r.status === "Deferred"){
+                    $(".approval-form-div").css('display' , 'block')
+                    $('#approval-deferral-form-title').text("Deferral Form");
+                    $('#approve-deferred-submit-btn').text("Defer Referral");
+
+                    $('#category-approval-select').css("pointer-events" , "none");
+                    $('#er-action').css("pointer-events" , "none");
+                    $(".card-footer").css('display' , 'none')
+                    $('.preemptive-text').hide();
+
+                    $('#category-approval-select').prepend(`<option value="${r.status}" selected hidden>${r.status}</option>`);
+                    $('#er-action').val(r.deferred_details)
+                }
             } else {
                 Swal.fire("Error", response.message, "error");
             }
@@ -351,6 +408,8 @@ $(document).ready(function() {
     // processing referral
     $(document).on("click", ".start-process", function () {
         let referralId = $(this).data("referral_id");
+        let referral_type = $(this).data("referral_type");
+        let referral_hpercode = $(this).data("referral_hpercode");
         let button = $(this);
 
         let row = button.closest("tr");
@@ -372,6 +431,7 @@ $(document).ready(function() {
         if (activeTimers[referralId]) {
             fetchReferralDetails(referralId);
             $("#approve-deferred-submit-btn").data("refid", referralId);
+            $("#approve-deferred-submit-btn").data("refHpercode", referral_hpercode);
             $("#patient-referral-modal").modal("show");
             return;
         }
@@ -380,7 +440,7 @@ $(document).ready(function() {
         $.ajax({
             url: "../../assets/php/incoming_referral/start_process.php",
             type: "POST",
-            data: { referral_id: referralId },
+            data: { referral_id: referralId, referral_type, referral_hpercode},
             dataType: "json",
             success: function (response) {
                 if (response.success) {
@@ -413,10 +473,12 @@ $(document).ready(function() {
 
     $(document).on("click", "#approve-deferred-submit-btn", function () {
         let referralId = $(this).data("refid");
+        let referral_hpercode = $(this).data("refHpercode");
+        
         let result = $("#select-response-status").val(); // either Approved or Deferred
         let row = $(this).closest("tr");
 
-        console.log(referralId, result, row)
+        console.log(referralId, result, row, referral_hpercode)
 
         $.ajax({
             url: '../../assets/php/incoming_referral/complete_process.php',
@@ -425,7 +487,8 @@ $(document).ready(function() {
                 referral_id: referralId, 
                 result: result,
                 pat_class : $('#category-approval-select').val(),
-                approval_details : $('#er-action').val()
+                approval_details : $('#er-action').val(),
+                referral_hpercode : referral_hpercode
              },
             dataType: "json",
             success: function (response) {
@@ -467,15 +530,19 @@ $(document).ready(function() {
             return;
         }
 
-        console.log(password)
+        console.log(password);
 
         // Example hardcoded password check (replace with AJAX validation)
         if (password === "123") {
+            // Show the real sensitive details
             row.find(".patient-name").text(realName);
             row.find(".patient-extra").html(`Address: ${realAddress}<br>Age: ${realAge}`);
 
-            // Enable process button
+            // Enable process button if it exists
             row.find(".start-process").prop("disabled", false);
+
+            // ✅ Enable view-referral button as well
+            row.find(".view-referral").prop("disabled", false);
 
             // Remove unlock button
             row.find(".unlock-sensitive").remove();
@@ -483,6 +550,7 @@ $(document).ready(function() {
             alert("Incorrect password! Access denied.");
         }
     });
+
 
 
 

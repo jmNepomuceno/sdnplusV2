@@ -15,7 +15,7 @@ $(document).ready(function() {
         if (Array.isArray(response)) {
             response.forEach(item => {
                 $("#agency").append(
-                    `<option value="${item.hospital_code}">${item.hospital_name}</option>`
+                    `<option value="${item.hospital_name}">${item.hospital_name}</option>`
                 );
             });
         }
@@ -33,17 +33,19 @@ $(document).ready(function() {
             agency: $("#agency").val().trim(),
             start_date: $("#start_date").val(),
             end_date: $("#end_date").val(),
+            // start_date: '2025-05-10',
+            // end_date: '2025-09-18',
             tat_filter: $("#tat_filter").val().trim(),
             sensitive_case: $("#sensitive_case").val(),
             status: $("#status").val()
         };
+
+        console.table(formData)
 
         if ($("#incomingReferralsTable").length) {
             fetch_incomingReferrals("../../assets/php/incoming_referral/search_incoming_referrals.php", formData);
         } else if ($("#outgoingReferralsTable").length) {
             fetch_outgoingReferrals("../../assets/php/outgoing_referral/search_outgoing_referrals.php", formData);
         }
-
-
     });
 })

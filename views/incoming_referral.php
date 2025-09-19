@@ -2,23 +2,27 @@
     include("../assets/connection/connection.php");
     session_start();
 
-    $sql = "UPDATE incoming_referrals SET status='Pending', reception_time=null, final_progressed_timer=null, approved_time=null, approval_details=null, status_interdept=null, sent_interdept_time=null, last_update=null, pat_class=null WHERE referral_id='REF002946'";
-    $stmt = $pdo->prepare($sql);
-    $stmt->execute();
+    // $sql = "UPDATE incoming_referrals SET status='Pending', reception_time=null, final_progressed_timer=null, approved_time=null, approval_details=null, status_interdept=null, sent_interdept_time=null, last_update=null, pat_class=null WHERE referral_id='REF002946'";
+    // $stmt = $pdo->prepare($sql);
+    // $stmt->execute();
 
-    $sql = "UPDATE hperson SET status=null, referral_id=null, type=null WHERE referral_id='REF002946'";
-    $stmt = $pdo->prepare($sql);
-    $stmt->execute();
+    // $sql = "UPDATE hperson SET status=null, type=null WHERE hpercode='PAT002933'";
+    // $stmt = $pdo->prepare($sql);
+    // $stmt->execute();
 
-    $sql = "UPDATE incoming_referrals SET status='Pending', reception_time=null, final_progressed_timer=null, approved_time=null, approval_details=null, status_interdept=null, sent_interdept_time=null, last_update=null, pat_class=null WHERE referral_id='REF002945'";
-    $stmt = $pdo->prepare($sql);
-    $stmt->execute();
+    // $sql = "UPDATE incoming_referrals SET status='Pending', reception_time=null, final_progressed_timer=null, approved_time=null, approval_details=null, status_interdept=null, sent_interdept_time=null, last_update=null, pat_class=null WHERE referral_id='REF002947'";
+    // $stmt = $pdo->prepare($sql);
+    // $stmt->execute();
 
-    $sql = "UPDATE hperson SET status=null, referral_id=null, type=null WHERE referral_id='PAT002945'";
-    $stmt = $pdo->prepare($sql);
-    $stmt->execute();
+    // $sql = "UPDATE hperson SET status=null, type=null, referral_id=null WHERE hpercode='PAT002934'";
+    // $stmt = $pdo->prepare($sql);
+    // $stmt->execute();
     
-    // $sql = "DELETE FROM incoming_referrals WHERE hpercode='PAT002932'";
+    // $sql = "DELETE FROM incoming_referrals WHERE hpercode='PAT002934'";
+    // $stmt = $pdo->prepare($sql);
+    // $stmt->execute();
+
+    // $sql = "UPDATE hperson SET status=null, type=null WHERE hpercode='PAT002934'";
     // $stmt = $pdo->prepare($sql);
     // $stmt->execute();
 ?>
@@ -76,7 +80,11 @@
                     </div>
 
                     <div class="form-row">
-                        <input type="text" class="form-control" id="tat_filter" name="tat_filter" placeholder="Turnaround Time Filter" autocomplete="off">
+                        <select class="form-control" id="tat_filter" name="tat_filter">
+                            <option value="">Turnaround Time</option>
+                            <option value="true">≥ 15 minutes (greater than or equal to 15)</option>
+                            <option value="false">< 15 minutes (less than 15)</option>
+                        </select>
                         
                         <select class="form-control" id="sensitive_case" name="sensitive_case">
                             <option value="">Sensitive Case</option>
@@ -92,16 +100,12 @@
                             <option value="deferred">Deferred</option>
                             <option value="cancelled">Cancelled</option>
                         </select>
-
                     </div>
-
                     <div class="form-row form-actions">
                         <button type="submit" class="btn btn-primary" id="search-filter-btn">Search</button>
                         <button type="reset" class="btn btn-secondary">Clear</button>
                     </div>
                 </form>
-
-
 
             </div>
 

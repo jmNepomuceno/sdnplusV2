@@ -16,7 +16,7 @@
         $start_date  = $_POST['start_date']  ?? null;
         $end_date    = $_POST['end_date']    ?? null;
         $turnaround  = $_POST['turnaround']  ?? null;
-        $sensitive   = $_POST['sensitive']   ?? null;
+        $sensitive   = $_POST['sensitive_case']   ?? null;
         $status      = $_POST['status']      ?? null;
 
         // Base query (same structure as your second PHP)
@@ -109,9 +109,16 @@
             $sql .= " AND r.sensitive_case = :sensitive";
             $params[":sensitive"] = $sensitive;
         }
-        if (!empty($turnaround)) {
-            $sql .= " AND r.final_progressed_timer <= :turnaround";
-            $params[":turnaround"] = $turnaround;
+        if ($turnaround !== null && $turnaround !== '') {
+            if ($turnaround === "true" || $turnaround === true) {
+                // ✅ Long turnaround (>= 15 minutes)
+                $sql .= " AND TIME(r.final_progressed_timer) >= :cutoff_time";
+            } else {
+                // ✅ Short turnaround (< 15 minutes)
+                $sql .= " AND TIME(r.final_progressed_timer) < :cutoff_time";
+            }
+
+            $params[":cutoff_time"] = "00:15:00";
         }
 
         $sql .= " ORDER BY r.date_time DESC";
@@ -119,6 +126,20 @@
         $stmt = $pdo->prepare($sql);
         $stmt->execute($params);
         $referrals = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        // ✅ Add numbering to reference_num
+        $refCounts = [];
+        foreach ($referrals as &$row) {
+            $refKey = $row['reference_num'];
+
+            if (!isset($refCounts[$refKey])) {
+                $refCounts[$refKey] = 1;
+            } else {
+                $refCounts[$refKey]++;
+            }
+
+            $row['reference_num'] = $refKey . ' - ' . $refCounts[$refKey];
+        }
 
         echo json_encode(["success" => true, "data" => $referrals]);
 

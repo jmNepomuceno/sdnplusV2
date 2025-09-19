@@ -66,6 +66,9 @@
                 "referring_doctor" => $referral["referring_doctor"],
                 "referring_doctor_mobile" => $referral['referred_by_no'],
                 "type" => $referral['type'],
+                "approval_details" => $referral['approval_details'],
+                "pat_class" => $referral['pat_class'],
+                "deferred_details" => $referral['deferred_details']
             ]
         ];
 

@@ -63,9 +63,24 @@
         $stmt->execute([":current_rhu" => $currentRHU]);
         $referrals = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
+        // ✅ Add numbering to reference_num
+        $refCounts = [];
+        foreach ($referrals as &$row) {
+            $refKey = $row['reference_num'];
+
+            if (!isset($refCounts[$refKey])) {
+                $refCounts[$refKey] = 1;
+            } else {
+                $refCounts[$refKey]++;
+            }
+
+            $row['reference_num'] = $refKey . ' - ' . $refCounts[$refKey];
+        }
+
         echo json_encode(["data" => $referrals], JSON_PRETTY_PRINT);
 
-    } catch (PDOException $e) {
+    } 
+    catch (PDOException $e) {
         echo json_encode([
             "error" => true,
             "message" => $e->getMessage()

@@ -5,11 +5,16 @@ header("Content-Type: application/json");
 date_default_timezone_set('Asia/Manila');
 session_start();
 
+require "../../../vendor/autoload.php";  // Ensure Composer's autoload is included
+use WebSocket\Client;
+
 try {
     $referral_id = $_POST['referral_id'] ?? null;
     $result = $_POST['result'] ?? null;
     $pat_class = $_POST['pat_class'] ?? null;
     $details = $_POST['approval_details'] ?? null; // can be approval_details OR deferred_details
+    
+    $hpercode = $_POST['referral_hpercode'] ?? null;
 
     if (!$referral_id || !$result) {
         echo json_encode(["success" => false, "message" => "Missing required data"]);
@@ -58,6 +63,12 @@ try {
             ":referral_id" => $referral_id
         ]);
 
+        $sql = "UPDATE hperson 
+                SET status = 'Approved'
+                WHERE hpercode = :hpercode";
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute([":hpercode" => $hpercode]);
+
         echo json_encode([
             "success" => true,
             "message" => "Referral approved successfully",
@@ -84,6 +95,12 @@ try {
             ":referral_id" => $referral_id
         ]);
 
+        $sql = "UPDATE hperson 
+            SET status = 'Deferred'
+            WHERE hpercode = :hpercode";
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute([":hpercode" => $hpercode]);
+
         echo json_encode([
             "success" => true,
             "message" => "Referral deferred successfully",
@@ -93,7 +110,19 @@ try {
     } else {
         echo json_encode(["success" => false, "message" => "Invalid result type"]);
     }
+
 } catch (Exception $e) {
     echo json_encode(["success" => false, "message" => $e->getMessage()]);
 }
+
+try {
+    // $client = new Client("ws://10.10.90.14:8081/chat");
+    // $client->send(json_encode(["action" => "completeProcess"]));
+
+    $client = new Client("ws://10.10.90.14:8082");
+    $client->send(json_encode(["action" => "completeProcess"]));
+} catch (Exception $e) {
+    echo "WebSocket error: " . $e->getMessage();
+}
+
 ?>

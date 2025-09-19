@@ -10,6 +10,7 @@ var fetch_outgoingReferrals = (url = '../../assets/php/outgoing_referral/get_out
                 data: data,
                 dataType: "json",
                 success: function (response) {
+                    console.log(response)
                     let referrals = response.data || [];
                     let dataSet = [];
                     console.log(referrals)
@@ -207,6 +208,37 @@ var fetchReferralDetails = (referralId) => {
                 $("#assessment-span").val(r.diagnosis);
                 $("#plan-span").val(r.plan);
                 $("#patlast-span").val(r.remarks);
+
+                $(".approval-form-div").css('display' , 'none')
+                $("#approve-deferred-submit-btn").css('display' , 'block')
+                // $('.preemptive-text').show();
+
+                if(r.status === 'Approved'){
+                    $(".approval-form-div").css('display' , 'block')
+                    $('#approval-deferral-form-title').text("Approval Form");
+                    $('#approve-deferred-submit-btn').text("Approve Referral");
+
+                    $('#category-approval-select').css("pointer-events" , "none");
+                    $('#er-action').css("pointer-events" , "none");
+                    $("#approve-deferred-submit-btn").css('display' , 'none')
+                    $('.preemptive-text').hide();
+
+                    $('#category-approval-select').prepend(`<option value="${r.status}" selected hidden>${r.status}</option>`);
+                    $('#er-action').val(r.approval_details)
+                }
+                else if(r.status === "Deferred"){
+                    $(".approval-form-div").css('display' , 'block')
+                    $('#approval-deferral-form-title').text("Deferral Form");
+                    $('#approve-deferred-submit-btn').text("Defer Referral");
+
+                    $('#category-approval-select').css("pointer-events" , "none");
+                    $('#er-action').css("pointer-events" , "none");
+                    $("#approve-deferred-submit-btn").css('display' , 'none')
+                    $('.preemptive-text').hide();
+
+                    $('#category-approval-select').prepend(`<option value="${r.status}" selected hidden>${r.status}</option>`);
+                    $('#er-action').val(r.deferred_details)
+                }
             } else {
                 Swal.fire("Error", response.message, "error");
             }
@@ -218,8 +250,6 @@ var fetchReferralDetails = (referralId) => {
 }
 
 
-
-
 $(document).ready(function() {    
     let patient_referral_modal = new bootstrap.Modal(document.getElementById('patient-referral-modal'));
 
@@ -228,15 +258,14 @@ $(document).ready(function() {
         console.log("Received from WebSocket:", data); // Debugging
 
         // Call fetchNotifValue() on every process update
-        switch (data.action.trim()) {
-            case "startProcess":
+        switch (data.action) {
+            case "sentIncomingReferral":
                 fetch_outgoingReferrals();
                 break;
             default:
                 console.log("Unknown action:", data.action);
         }
     };
-
 
     // Call the function on page load
     fetch_outgoingReferrals();

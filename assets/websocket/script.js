@@ -1,4 +1,5 @@
-const socket = new WebSocket("ws://10.10.90.14:8081/chat");
+// const socket = new WebSocket("ws://10.10.90.14:8081/chat");
+const socket = new WebSocket("ws://10.10.90.14:8082");
 
 // When the connection is open
 socket.onopen = function(event) {

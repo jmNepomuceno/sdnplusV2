@@ -207,7 +207,7 @@
             ]);
 
             try {
-                $client = new Client("ws://10.10.90.14:8081/chat");
+                $client = new Client("ws://10.10.90.14:8082");
                 $client->send(json_encode(["action" => "sentIncomingReferral"]));
             } catch (Exception $e) {
                 echo "WebSocket error: " . $e->getMessage();
