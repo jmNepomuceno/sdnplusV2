@@ -29,6 +29,8 @@
                 r.reception_time,
                 r.sensitive_case,
                 r.hpercode,
+                r.referred_by_code,
+                r.cancelled_request,
 
             sh.hospital_director,
             sh.hospital_director_mobile,
@@ -45,14 +47,14 @@
             LEFT JOIN bghmc.provinces p 
                 ON hp.pat_province = p.province_code
             LEFT JOIN bghmc.sdn_hospital sh 
-                ON r.referred_by = sh.hospital_name
+                ON r.refer_to_code = sh.hospital_code
 
-            WHERE r.status IN ('Pending', 'On-Process') AND r.refer_to = ?
+            WHERE r.status IN ('Pending', 'On-Process') AND r.refer_to_code = ?
             ORDER BY r.date_time DESC
         ";
 
         $stmt = $pdo->prepare($sql);
-        $stmt->execute([$_SESSION['user']['hospital_name']]);
+        $stmt->execute([$_SESSION['user']['hospital_code']]);
         $referrals = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
         // ✅ Add numbering to reference_num

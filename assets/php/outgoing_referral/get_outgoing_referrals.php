@@ -7,7 +7,7 @@
 
     try {
         // Example: get the logged-in RHU name from session
-        $currentRHU = $_SESSION['user']['hospital_name'] ?? null;
+        $currentRHU = $_SESSION['user']['hospital_code'] ?? null;
 
         $sql = "
         SELECT 
@@ -31,6 +31,7 @@
             r.status,
             r.reception_time,
             r.sensitive_case,
+            r.referred_by_code,
 
             -- Optional: compute processing time if timestamps exist
             CASE 
@@ -54,8 +55,8 @@
         LEFT JOIN bghmc.provinces p 
             ON hp.pat_province = p.province_code
         LEFT JOIN bghmc.sdn_hospital sh 
-            ON r.referred_by = sh.hospital_name
-        WHERE r.referred_by = :current_rhu AND r.status IN ('Pending', 'On-Process')
+            ON r.referred_by_code = sh.hospital_code
+        WHERE r.referred_by_code = :current_rhu AND r.status IN ('Pending', 'On-Process')
             ORDER BY r.date_time DESC
         ";
 

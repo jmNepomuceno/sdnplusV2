@@ -6,12 +6,12 @@
     // $stmt = $pdo->prepare($sql);
     // $stmt->execute();
 
-    // $sql = "UPDATE hperson SET status=null, type=null WHERE hpercode='PAT002933'";
-    // $stmt = $pdo->prepare($sql);
+    // $sql = "UPDATE hperson SET status='Pending', type='ER' WHERE hpercode='PAT000001'";
+    // $stmt = $pdo->prepare($sql); //PAT000001 //PAT002934
     // $stmt->execute();
 
-    // $sql = "UPDATE incoming_referrals SET status='Pending', reception_time=null, final_progressed_timer=null, approved_time=null, approval_details=null, status_interdept=null, sent_interdept_time=null, last_update=null, pat_class=null WHERE referral_id='REF002947'";
-    // $stmt = $pdo->prepare($sql);
+    // $sql = "UPDATE incoming_referrals SET status='Pending', reception_time=null, final_progressed_timer=null, approved_time=null, approval_details=null, status_interdept=null, sent_interdept_time=null, last_update=null, pat_class=null WHERE referral_id='REF002948'";
+    // $stmt = $pdo->prepare($sql); //REF002948 //REF002947
     // $stmt->execute();
 
     // $sql = "UPDATE hperson SET status=null, type=null, referral_id=null WHERE hpercode='PAT002934'";
@@ -24,6 +24,9 @@
 
     // $sql = "UPDATE hperson SET status=null, type=null WHERE hpercode='PAT002934'";
     // $stmt = $pdo->prepare($sql);
+    // $stmt->execute();
+
+    // $stmt = $pdo->prepare("UPDATE incoming_referrals SET refer_to_code = 1111");
     // $stmt->execute();
 ?>
 <!DOCTYPE html>
@@ -43,7 +46,7 @@
 <body>
 
     <div class="left-container">
-        <?php include('../views/sidebar.php') ?>
+        <?php include('../views/sidebar.php');?>
     </div>
 
     <div class="right-container">

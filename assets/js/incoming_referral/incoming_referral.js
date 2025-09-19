@@ -82,6 +82,16 @@ var fetch_incomingReferrals = (url = '../../assets/php/incoming_referral/get_inc
                             `;
                         }
 
+                        if (item.cancelled_request == 1) {
+                            actionButtons += `
+                                <button class="btn btn-sm btn-danger proceed-cancel" 
+                                    data-referral_id="${item.referral_id}">
+                                    🚨 Cancellation Request
+                                </button>
+                            `;
+                        }
+
+
                         // ---------------- PATIENT INFO ----------------
                         let patientInfo = "";
                         if (isSensitive) {
@@ -365,6 +375,8 @@ var fetchReferralDetails = (referralId) => {
         }
     });
 }
+
+
 $(document).ready(function() {    
     let patient_referral_modal = new bootstrap.Modal(document.getElementById('patient-referral-modal'));
     // patient_referral_modal.show();
@@ -552,6 +564,35 @@ $(document).ready(function() {
     });
 
 
+    $(document).on("click", ".proceed-cancel", function () {
+        let referralId = $(this).data("referral_id");
+
+        Swal.fire({
+            title: "Proceed to Cancel?",
+            text: "This will mark the referral as cancelled.",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonText: "Yes, cancel it",
+            confirmButtonColor: "#d33"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    url: "../../assets/php/incoming_referral/proceed_cancel.php",
+                    method: "POST",
+                    data: { referral_id: referralId },
+                    dataType: "json",
+                    success: function (response) {
+                        if (response.success) {
+                            Swal.fire("Cancelled!", response.message, "success");
+                            fetch_incomingReferrals();
+                        } else {
+                            Swal.fire("Error", response.message, "error");
+                        }
+                    }
+                });
+            }
+        });
+    });
 
 
 });

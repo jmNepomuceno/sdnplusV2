@@ -13,7 +13,7 @@ $(document).ready(function() {
             hospitalSelect.empty();
 
             // Put BGHMC first
-            hospitalSelect.append('<option value="BGHMC" selected>Bataan General Hospital and Medical Center</option>');
+            hospitalSelect.append('<option value="1111" selected>Bataan General Hospital and Medical Center</option>');
 
             // Then append the rest
             data.forEach(hospital => {
@@ -128,7 +128,9 @@ $(document).ready(function() {
             rr: $("#rr-input").val(),
             temp: $("#temp-input").val(),
             weight: $("#weight-input").val(),
-            pertinent_findings: $("#pertinent-findings-input").val()
+            pertinent_findings: $("#pertinent-findings-input").val(),
+            // referred_by_id : nasa php
+            refer_to_code : $("#rhu-select").val()
         };
 
         console.table(formData)

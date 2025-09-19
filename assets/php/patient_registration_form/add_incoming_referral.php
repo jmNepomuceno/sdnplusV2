@@ -108,6 +108,9 @@
             $weight          = $_POST['weight'] ?? null;
             $pertinent_findings = $_POST['pertinent_findings'] ?? null;
 
+            $referred_by_code   = $_SESSION['user']['hospital_code'];
+            $refer_to_code = $_POST['refer_to_code'];
+
             // Default values
             $status   = "Pending";
             $dateTime = date("Y-m-d H:i:s");
@@ -143,7 +146,7 @@
                 phic_member, transport, referring_doctor,
                 chief_complaint_history, reason, diagnosis, remarks,
                 bp, hr, rr, temp, weight, pertinent_findings,
-                status, date_time
+                status, date_time, referred_by_code, refer_to_code
             ) VALUES (
                 :hpercode, :referral_id, :reference_num, :patlast, :patfirst, :patmiddle, :patsuffix,
                 :type, :referred_by, :referred_by_no, :refer_to,
@@ -151,7 +154,7 @@
                 :phic_member, :transport, :referring_doctor,
                 :chief_complaint_history, :reason, :diagnosis, :remarks,
                 :bp, :hr, :rr, :temp, :weight, :pertinent_findings,
-                :status, :date_time
+                :status, :date_time, :referred_by_code, :refer_to_code
             )";
 
             $stmt = $pdo->prepare($sql);
@@ -186,7 +189,9 @@
                 ':weight' => $weight,
                 ':pertinent_findings' => $pertinent_findings,
                 ':status' => $status,
-                ':date_time' => $dateTime
+                ':date_time' => $dateTime,
+                ':referred_by_code' => $referred_by_code,
+                ':refer_to_code' => $refer_to_code,
             ]);
 
             // update the status of the patient for the hperson

@@ -60,7 +60,12 @@ var fetch_outgoingReferrals = (url = '../../assets/php/outgoing_referral/get_out
                                 data-referral_id="${item.referral_id}">
                                 <i class="fa fa-eye"></i> More Details
                             </button>
+                            <button class="btn btn-sm btn-outline-danger cancel-referral" 
+                                data-referral_id="${item.referral_id}">
+                                <i class="fa fa-times"></i> Cancel Referral
+                            </button>
                         `;
+
 
                         // ---------------- Push Row ----------------
                         dataSet.push([
@@ -262,6 +267,12 @@ $(document).ready(function() {
             case "sentIncomingReferral":
                 fetch_outgoingReferrals();
                 break;
+            case "startProcess":
+                fetch_outgoingReferrals();
+                break;
+            case "completeProcess":
+                fetch_outgoingReferrals();
+                break;
             default:
                 console.log("Unknown action:", data.action);
         }
@@ -320,6 +331,37 @@ $(document).ready(function() {
             alert("Incorrect password! Access denied.");
         }
     });
+
+    $(document).on("click", ".cancel-referral", function () {
+        let referralId = $(this).data("referral_id");
+        Swal.fire({
+            title: "Request Cancellation?",
+            text: "This will send a cancellation request to the receiving hospital.",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#d33",
+            cancelButtonColor: "#3085d6",
+            confirmButtonText: "Yes, request cancel"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    url: '../../assets/php/outgoing_referral/request_cancel.php',
+                    method: "POST",
+                    data: { referral_id: referralId },
+                    dataType: "json",
+                    success: function (response) {
+                        if (response.success) {
+                            Swal.fire("Requested!", response.message, "success");
+                            fetch_outgoingReferrals();
+                        } else {
+                            Swal.fire("Error", response.message, "error");
+                        }
+                    }
+                });
+            }
+        });
+    });
+
 
 });
 

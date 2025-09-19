@@ -67,8 +67,8 @@
             LEFT JOIN bghmc.provinces p 
                 ON hp.pat_province = p.province_code
             LEFT JOIN bghmc.sdn_hospital sh 
-                ON r.referred_by = sh.hospital_name
-            WHERE 1=1
+                ON r.refer_to_code = sh.hospital_code
+            WHERE r.refer_to_code = '".$_SESSION['user']['hospital_code']."'
         ";
 
         $params = [];
