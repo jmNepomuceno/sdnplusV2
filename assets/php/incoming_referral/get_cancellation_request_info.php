@@ -7,28 +7,18 @@
 
     require "../../../vendor/autoload.php";  // Ensure Composer's autoload is included
     use WebSocket\Client;
-    
+
     if (!empty($_POST['referral_id'])) {
         $referralId = $_POST['referral_id'];
 
         try {
-            $sql = "UPDATE bghmc.incoming_referrals 
-                    SET status = 'Cancelled'
-                    WHERE referral_id = :referral_id";
+            $sql = " SELECT cancelled_requestor, cancellation_request_time, cancellation_reason FROM bghmc.incoming_referrals WHERE referral_id = :referral_id";
+
             $stmt = $pdo->prepare($sql);
             $stmt->execute([":referral_id" => $referralId]);
+            $data = $stmt->fetch(PDO::FETCH_ASSOC);
 
-            try {
-                // $client = new Client("ws://10.10.90.14:8081/chat");
-                // $client->send(json_encode(["action" => "completeProcess"]));
-
-                $client = new Client("ws://10.10.90.14:8082");
-                $client->send(json_encode(["action" => "cancelReferralRequestCompleted"]));
-            } catch (Exception $e) {
-                echo "WebSocket error: " . $e->getMessage();
-            }
-
-            echo json_encode(["success" => true, "message" => "Referral has been cancelled."]);
+            echo json_encode(["data" => $data], JSON_PRETTY_PRINT);
         } catch (PDOException $e) {
             echo json_encode(["success" => false, "message" => $e->getMessage()]);
         }

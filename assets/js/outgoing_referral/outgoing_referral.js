@@ -273,6 +273,9 @@ $(document).ready(function() {
             case "completeProcess":
                 fetch_outgoingReferrals();
                 break;
+            case "cancelReferralRequestCompleted":
+                fetch_outgoingReferrals();
+                break;
             default:
                 console.log("Unknown action:", data.action);
         }
@@ -333,26 +336,50 @@ $(document).ready(function() {
     });
 
     $(document).on("click", ".cancel-referral", function () {
-        let referralId = $(this).data("referral_id");
+        let $btn = $(this); // capture the clicked button
+        let referralId = $btn.data("referral_id");
+
         Swal.fire({
             title: "Request Cancellation?",
-            text: "This will send a cancellation request to the receiving hospital.",
+            text: "Please provide a reason for cancelling this referral.",
             icon: "warning",
+            input: "textarea",
+            inputPlaceholder: "Enter reason here...",
+            inputAttributes: {
+                "aria-label": "Type your reason here"
+            },
             showCancelButton: true,
             confirmButtonColor: "#d33",
             cancelButtonColor: "#3085d6",
-            confirmButtonText: "Yes, request cancel"
+            confirmButtonText: "Yes, request cancel",
+            preConfirm: (reason) => {
+                if (!reason) {
+                    Swal.showValidationMessage("You need to provide a reason!");
+                }
+                return reason;
+            }
         }).then((result) => {
             if (result.isConfirmed) {
                 $.ajax({
                     url: '../../assets/php/outgoing_referral/request_cancel.php',
                     method: "POST",
-                    data: { referral_id: referralId },
+                    data: { 
+                        referral_id: referralId,
+                        reason: result.value
+                    },
                     dataType: "json",
                     success: function (response) {
                         if (response.success) {
                             Swal.fire("Requested!", response.message, "success");
-                            fetch_outgoingReferrals();
+
+                            // 🔹 Change button to pending state
+                            $btn
+                                .removeClass("btn-outline-danger cancel-referral")
+                                .addClass("btn-secondary")
+                                .prop("disabled", true)
+                                .text("Pending Cancel Approval");
+
+                            // fetch_outgoingReferrals();
                         } else {
                             Swal.fire("Error", response.message, "error");
                         }
@@ -361,6 +388,8 @@ $(document).ready(function() {
             }
         });
     });
+
+
 
 
 });

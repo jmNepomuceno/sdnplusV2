@@ -10,7 +10,7 @@
     // $stmt = $pdo->prepare($sql); //PAT000001 //PAT002934
     // $stmt->execute();
 
-    // $sql = "UPDATE incoming_referrals SET status='Pending', reception_time=null, final_progressed_timer=null, approved_time=null, approval_details=null, status_interdept=null, sent_interdept_time=null, last_update=null, pat_class=null WHERE referral_id='REF002948'";
+    // $sql = "UPDATE incoming_referrals SET status='Pending', reception_time=null, final_progressed_timer=null, approved_time=null, approval_details=null, status_interdept=null, sent_interdept_time=null, last_update=null, pat_class=null, cancelled_request=NULL WHERE referral_id='REF002948'";
     // $stmt = $pdo->prepare($sql); //REF002948 //REF002947
     // $stmt->execute();
 
@@ -55,6 +55,7 @@
 
         <div class="incoming-referral-container">
             <!-- 🔹 Filter/Search Section -->
+            <!-- <?php echo "<pre>" . print_r($_SESSION, true) . "</pre>"; ?> -->
             <div class="filter-section card">
                 <h3>Filter Referrals</h3>
                 <form class="filter-form" id="referral-search-form">

@@ -277,7 +277,7 @@ var startTimer = (referralId, reception_time) =>{
     activeTimers[referralId] = setInterval(update, 1000);
 }
 
- // ♻️ Reusable function to fetch details
+// ♻️ Reusable function to fetch details
 var fetchReferralDetails = (referralId) => {
     $.ajax({
         url: "../../assets/php/incoming_referral/get_referral_details.php",
@@ -393,6 +393,9 @@ $(document).ready(function() {
         // Call fetchNotifValue() on every process update
         switch (data.action) {
             case "sentIncomingReferral":
+                fetch_incomingReferrals();
+                break;
+            case "cancelReferralRequest":
                 fetch_incomingReferrals();
                 break;
             default:
@@ -567,29 +570,54 @@ $(document).ready(function() {
     $(document).on("click", ".proceed-cancel", function () {
         let referralId = $(this).data("referral_id");
 
-        Swal.fire({
-            title: "Proceed to Cancel?",
-            text: "This will mark the referral as cancelled.",
-            icon: "warning",
-            showCancelButton: true,
-            confirmButtonText: "Yes, cancel it",
-            confirmButtonColor: "#d33"
-        }).then((result) => {
-            if (result.isConfirmed) {
-                $.ajax({
-                    url: "../../assets/php/incoming_referral/proceed_cancel.php",
-                    method: "POST",
-                    data: { referral_id: referralId },
-                    dataType: "json",
-                    success: function (response) {
-                        if (response.success) {
-                            Swal.fire("Cancelled!", response.message, "success");
-                            fetch_incomingReferrals();
-                        } else {
-                            Swal.fire("Error", response.message, "error");
+        $.ajax({
+            url: "../../assets/php/incoming_referral/get_cancellation_request_info.php",
+            method: "POST",
+            data: { referral_id: referralId },
+            dataType: "json",
+            success: function (response) {
+                console.log(response);
+
+                if (response.data) {
+                    let info = response.data;
+
+                    Swal.fire({
+                        title: "Proceed to Cancel?",
+                        html: `
+                            <div class="text-start">
+                                <p><b>Requestor:</b> ${info.cancelled_requestor || "N/A"}</p>
+                                <p><b>Reason:</b> ${info.cancellation_reason || "N/A"}</p>
+                                <p><b>Requested At:</b> ${info.cancellation_request_time || "N/A"}</p>
+                                <hr>
+                                <p>This will mark the referral as <b>Cancelled</b>.</p>
+                            </div>
+                        `,
+                        icon: "warning",
+                        showCancelButton: true,
+                        confirmButtonText: "Yes, cancel it",
+                        confirmButtonColor: "#d33",
+                        cancelButtonColor: "#3085d6"
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            $.ajax({
+                                url: "../../assets/php/incoming_referral/proceed_cancel.php",
+                                method: "POST",
+                                data: { referral_id: referralId },
+                                dataType: "json",
+                                success: function (res) {
+                                    if (res.success) {
+                                        Swal.fire("Cancelled!", res.message, "success");
+                                        fetch_incomingReferrals();
+                                    } else {
+                                        Swal.fire("Error", res.message, "error");
+                                    }
+                                }
+                            });
                         }
-                    }
-                });
+                    });
+                } else {
+                    Swal.fire("Error", "No cancellation info found for this referral.", "error");
+                }
             }
         });
     });
