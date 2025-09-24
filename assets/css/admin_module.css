@@ -1,0 +1,27 @@
+/* Layout */
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    display: flex;
+    height: 100vh;
+}
+
+.left-container {
+    width: 250px;
+    background: #f8f8f8;
+    padding: 20px;
+    flex-shrink: 0;
+}
+
+.right-container {
+    flex: 1;
+    overflow-y: auto;
+    background: #fafafa;
+
+    display:flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+
+    margin:0;
+}

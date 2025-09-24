@@ -134,7 +134,6 @@
                     </div>
                 </div>
 
-               
             </fieldset>
 
 
@@ -240,7 +239,9 @@
                 </fieldset>
 
                 <fieldset>
-                    <legend>Current Address <label><input id="same-permanent-btn" type="checkbox" name="same_as_permanent"> Same as permanent</label></legend>
+                    <legend id="current-address-legend">Current Address 
+                        <label><input id="same-permanent-btn" type="checkbox" name="same_as_permanent"> Same as permanent</label>
+                    </legend>
                     <div class="form-row">
                         <div class="form-group">
                             <label>House No./Lot/Bldg</label>

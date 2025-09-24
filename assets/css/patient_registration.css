@@ -34,7 +34,7 @@ body {
   align-items: flex-start;
   gap: 30px;
   /* padding: 20px; */
-
+  width: 100%;
 }
 
 .right-container .form-container .personal-info{
@@ -59,6 +59,24 @@ body {
 .right-container .form-container fieldset legend {
     font-weight: bold;
     padding: 0 5px;
+}
+
+#current-address-legend{
+  display:flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+#current-address-legend label{
+  display:flex;
+  flex-direction: row;
+  justify-content: left;
+  gap:5px;
+}
+
+#current-address-legend label input[type="checkbox"] {
+  width: 15px; /* Adjust as needed */
+  height: 15px; /* Adjust as needed */
 }
 
 .right-container .form-container fieldset .form-row {
@@ -227,5 +245,14 @@ button[type="submit"]:hover {
   .right-container .form-container fieldset input, .right-container .form-container fieldset select {
       font-size: 0.75rem;
   }
+
+  .right-container .form-container {
+    width: 90%;
+  }
+
+  .right-container .form-container fieldset legend {
+    font-size: 1rem;
+  }
+
 }
 

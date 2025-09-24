@@ -60,11 +60,18 @@ var fetch_outgoingReferrals = (url = '../../assets/php/outgoing_referral/get_out
                                 data-referral_id="${item.referral_id}">
                                 <i class="fa fa-eye"></i> More Details
                             </button>
-                            <button class="btn btn-sm btn-outline-danger cancel-referral" 
-                                data-referral_id="${item.referral_id}">
-                                <i class="fa fa-times"></i> Cancel Referral
-                            </button>
                         `;
+
+                        // ✅ Add cancel button only if status is Pending
+                        if (item.status && item.status.toLowerCase() === "pending") {
+                            actionButtons += `
+                                <button class="btn btn-sm btn-outline-danger cancel-referral" 
+                                    data-referral_id="${item.referral_id}">
+                                    <i class="fa fa-times"></i> Cancel Referral
+                                </button>
+                            `;
+                        }
+
 
 
                         // ---------------- Push Row ----------------
@@ -244,6 +251,13 @@ var fetchReferralDetails = (referralId) => {
                     $('#category-approval-select').prepend(`<option value="${r.status}" selected hidden>${r.status}</option>`);
                     $('#er-action').val(r.deferred_details)
                 }
+                else if(r.status === "Cancelled"){
+                    $(".cancellation-form-div").css('display' , 'block')
+                    $('#cancellation-requestor').val(r.cancelled_requestor)
+                    $('#cancellation-reason').val(r.cancellation_reason)
+                    console.log(r.cancellation_request_time)
+                    $('#cancellation-requested-date').val(r.cancellation_request_time)
+                }   
             } else {
                 Swal.fire("Error", response.message, "error");
             }

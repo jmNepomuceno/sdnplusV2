@@ -1,0 +1,37 @@
+.custom-modal-user-accessibility {
+    max-width: 75vw; /* Adjust the width as per your requirements */
+    width: 100%;
+}
+
+#user-accessibility-form .roles-box {
+    background: #f8f9fa;        /* light background */
+    border: 1px solid #dee2e6;  /* subtle border */
+    border-radius: 6px;
+    align-items: center;        /* vertically center checkboxes */
+    min-height: 100%;           /* align with inputs */
+}
+
+#user-accessibility-form .roles-box .form-check {
+    margin-bottom: 0;           /* remove vertical spacing since it's row now */
+}
+
+#user-accessibility-table th,
+#user-accessibility-table td {
+    vertical-align: middle;
+}
+
+#user-accessibility-table td:nth-child(6) { /* Access / Permission */
+    white-space: normal !important;
+}
+
+
+@media only screen and (max-height: 800px){
+    #myModal-hospitalAndUsers #modal-body-main{
+        height: 500px;
+    }
+
+    .custom-modal-user-accessibility {
+        max-width: 80vw;
+        width: 100%;
+    }
+}

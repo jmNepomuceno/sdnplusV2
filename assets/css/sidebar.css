@@ -165,8 +165,14 @@ body {
 
 
 
-@media (max-width: 768px) {
+@media only screen and (max-height: 800px){
     .main {
         margin-left: 0;
     }
+
+    .sidebar #side-bar-title-bgh img{
+        width: 33%;
+        height: 92%;
+    }
+
 }

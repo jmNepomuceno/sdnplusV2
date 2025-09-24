@@ -217,7 +217,33 @@
                 </div>
             </div>
 
+            <!-- create again the viewing of the cancellation form -->
+            <div class="card shadow-sm border-0 cancellation-form-div">
+                <div class="card-header bg-danger text-white">
+                    <h6 class="mb-0" id="cancellation-form-title">Cancellation Details</h6>
+                </div>
+
+                <div class="card-body bg-light">
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Reason for Cancellation</label>
+                        <textarea id="cancellation-reason" class="form-control" rows="5" readonly></textarea>
+                    </div>
+
+                    <!-- also the vaalue of the cancellation requestor and the requested date -->
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Requested By</label>
+                        <input type="text" class="form-control" id="cancellation-requestor" readonly>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Requested Date</label>
+                        <input type="text" class="form-control" id="cancellation-requested-date" readonly>
+                    </div>
+                </div>
+            </div>
+
         </div>
+
 
         <!-- Modal Footer -->
         <div class="modal-footer">

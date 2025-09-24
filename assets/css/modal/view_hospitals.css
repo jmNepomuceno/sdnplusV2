@@ -1,0 +1,11 @@
+.custom-modal-view-hospitals {
+    max-width: 85vw; /* Adjust the width as per your requirements */
+    width: 100%;
+}
+
+@media only screen and (max-height: 800px){
+    .custom-modal-view-hospitals {
+        max-width: 85vw;
+        width: 100%;
+    }
+}

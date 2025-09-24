@@ -16,16 +16,17 @@
 
         <?php if (!empty($permissions['incoming_referral'])): ?>
             <li><a href="../views/incoming_referral.php">📄 <span>Incoming Referral</span></a></li>
-            <li><a href="#">📊 <span>Dashboard – Incoming Referral</span></a></li>
         <?php endif; ?>
 
         <?php if (!empty($permissions['outgoing_referral'])): ?>
-            <li><a href="../views/outgoing_referral.php">📊 <span>Outgoing Referral</span></a></li>
-            <li><a href="#">📊 <span>Dashboard – Outgoing Referral</span></a></li>
+            <li><a href="../views/outgoing_referral.php">📄 <span>Outgoing Referral</span></a></li>
         <?php endif; ?>
 
+        <li><a href="#">📊 <span>Dashboard – Incoming Referral</span></a></li>
+        <li><a href="#">📊 <span>Dashboard – Outgoing Referral</span></a></li>
+
         <?php if (!empty($permissions['admin_function'])): ?>
-            <li><a href="#">🛠 <span>Admin Module</span></a></li>
+            <li><a href="../views/admin_module.php">🛠 <span>Admin Module</span></a></li>
         <?php endif; ?>
 
         <?php if (!empty($permissions['history_log'])): ?>

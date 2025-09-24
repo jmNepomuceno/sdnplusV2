@@ -366,6 +366,12 @@ var fetchReferralDetails = (referralId) => {
                     $('#category-approval-select').prepend(`<option value="${r.status}" selected hidden>${r.status}</option>`);
                     $('#er-action').val(r.deferred_details)
                 }
+                else if(r.status === "Cancelled"){
+                    $(".cancellation-form-div").css('display' , 'block')
+                    $('#cancellation-requestor').val(r.cancelled_requestor)
+                    $('#cancellation-reason').val(r.cancellation_reason)
+                    $('#cancellation-requested-date').val(r.cancellation_request_time)
+                }   
             } else {
                 Swal.fire("Error", response.message, "error");
             }

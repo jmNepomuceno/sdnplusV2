@@ -68,7 +68,10 @@
                 "type" => $referral['type'],
                 "approval_details" => $referral['approval_details'],
                 "pat_class" => $referral['pat_class'],
-                "deferred_details" => $referral['deferred_details']
+                "deferred_details" => $referral['deferred_details'],
+                "cancelled_requestor" => $referral['cancelled_requestor'],
+                "cancellation_request_time" => $referral['cancellation_request_time'],
+                "cancellation_reason" => $referral['cancellation_reason']
             ]
         ];
 
