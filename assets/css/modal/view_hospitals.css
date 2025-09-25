@@ -3,6 +3,21 @@
     width: 100%;
 }
 
+#hospitals-list {
+    overflow-x:scroll;
+}
+
+
+.accordion-body {
+    overflow-x: auto;
+    max-width: 100%;
+}
+
+.accordion-body .table {
+    width: 100% !important;
+    table-layout: auto;
+}
+
 @media only screen and (max-height: 800px){
     .custom-modal-view-hospitals {
         max-width: 85vw;

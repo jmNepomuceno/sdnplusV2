@@ -5,5 +5,17 @@ $(document).ready(function () {
     
     // patientClassificationModal.show()
     // patientClassificationModal.show()
-    hospitalsModal.show()
+    // hospitalsModal.show()
+
+    $('.go-user-access').click(function(){
+        user_accessibility_modal.show()
+    })
+
+    $('.go-classification').click(function(){
+        patientClassificationModal.show()
+    })
+
+    $('.go-hospitals').click(function(){
+        hospitalsModal.show()
+    })
 });
