@@ -22,7 +22,7 @@
             <li><a href="../views/outgoing_referral.php">📄 <span>Outgoing Referral</span></a></li>
         <?php endif; ?>
 
-        <li><a href="#">📊 <span>Dashboard – Incoming Referral</span></a></li>
+        <li><a href="../views/dashboard_incoming.php">📊 <span>Dashboard – Incoming Referral</span></a></li>
         <li><a href="#">📊 <span>Dashboard – Outgoing Referral</span></a></li>
 
         <?php if (!empty($permissions['admin_function'])): ?>
